@@ -7,63 +7,50 @@ of generating [spectral data](https://github.com/ntBre/spectro) from them
 
 # Installation
 
-Assuming you have the [Rust toolchain](https://www.rust-lang.org/tools/install)
-installed, run
+Install the [Rust toolchain](https://www.rust-lang.org/tools/install) with
+rustup. No root access is needed, and the first build automatically downloads
+the Rust version pinned in `rust-toolchain.toml`. Then, from the top of this
+repository, run
 
 ```bash
-make install.full
+cargo install --path crates/pbqff
 ```
 
-As you can see in the Makefile, this simply runs
+This builds pbqff in release mode and puts the `pbqff` binary in
+`~/.cargo/bin`, which rustup adds to your `PATH`.
+
+On a cluster with several operating systems sharing one home directory, build
+separately on each one (for example by setting `CARGO_TARGET_DIR` per OS),
+because a binary built against a newer glibc will not run on an older system.
+
+## Quantum chemistry programs
+
+pbqff runs an external program for every single-point energy. It finds each
+program through an environment variable, falling back to a default only when
+the variable is unset:
+
+| Program | Variable    | Default (local queue) |
+|---------|-------------|-----------------------|
+| MOPAC   | `MOPAC_CMD` | `/opt/mopac/mopac`    |
+| Molpro  | `MOLPRO_CMD`| none, must be set     |
+| CFOUR   | `CFOUR_CMD` | `/opt/cfour/cfour`    |
+| DFTB+   | `DFTB_CMD`  | `/opt/dftb+/dftb+`    |
+| ORCA    | `ORCA_CMD`  | `orca`                |
+
+Export the variable for each program you use (for example in `~/.bashrc`).
+Slurm passes your environment to jobs by default, and the bundled PBS
+templates request the same with `#PBS -V`.
+
+## Running the tests
 
 ```bash
-cargo build --features vers --release  # indirectly through target/release/pbqff
-sudo ln -sf $(realpath target/release/pbqff) $(PREFIX)/pbqff
-sudo ln -sf $(realpath qffbuddy/qffbuddy.py) $(PREFIX)/qffbuddy
-sudo cp $< $(MANDIR)/pbqff.1
+PSQS_NO_RESUB=1 cargo test --workspace --all-features
 ```
 
-to build the binary in release mode, and link it into the `PREFIX` directory,
-which is presumably on your `$PATH`, under the name `pbqff`. It also links
-`qffbuddy` into this directory and builds the `man` page and installs that in
-`MANDIR`. `PREFIX` defaults to `/usr/bin`, which should work fine on Linux, but
-on macOS, you will likely need to use `/usr/local/bin`. `MANDIR` defaults to
-`/usr/local/share/man/man1`, but you can override this as well. For example,
-fully specifying the defaults would look something like this:
-
-``` shell
-make install.full PREFIX=/usr/bin MANDIR=/usr/local/share/man/man1
-```
-
-If you don't care about `qffbuddy` or the manual, you can use the plain
-`install` recipe, which defers to `cargo install`. Depending on your Rust
-installation, this will likely put the binary in `$HOME/.cargo/bin`, which you
-may need to add to your `PATH`.
-
-You can also build a PDF copy of the manual with `make man/rpbqff.pdf`.
-
-## Dependencies
-
-If you're installing `pbqff` on a "normal" machine, you're very likely to have
-most of these programs already. But if you install on a fresh, minimal Ubuntu
-installation (like I do in [this
-video](https://www.youtube.com/watch?v=y-FH-LBqzXM)), you might need to install
-some or all of these:
-
-- curl (for rustup install)
-- rust nightly toolchain
-- git
-- make
-- openssl (on arch) or libssl-dev (on ubuntu) (for vers feature)
-- pkg-config (for locating openssl)
-- gcc (for linking)
-- python3, python3-tk, idle3 (for qffbuddy)
-- cmake, gfortran, libblas-dev, liblapack-dev (for MOPAC)
-
-For installing or building `pbqff` itself, you can skip this last set, which are
-required for building MOPAC from source. However, if you want to run the tests
-for `pbqff`, you will need MOPAC installed at `/opt/mopac/mopac`, so these
-dependencies are necessary in that case.
+The integration tests run real MOPAC calculations, so `MOPAC_CMD` must point to
+a working MOPAC (the open-source releases at
+https://github.com/openmopac/mopac/releases work). `PSQS_NO_RESUB=1` makes a
+failed job submission stop the run instead of retrying.
 
 # Coordinate Types
 pbqff supports running QFFs in the following coordinate systems:
@@ -76,8 +63,8 @@ The normal coordinates are determined automatically by running a Cartesian
 harmonic force field.
 
 # Programs and Queues
-pbqff supports Molpro and Mopac for computing single-point energies and the PBS
-and Slurm queuing systems via [psqs](https://github.com/ntBre/psqs)
+pbqff supports MOPAC, Molpro, CFOUR, DFTB+, and ORCA for computing single-point
+energies, and the PBS and Slurm queuing systems (plus a local queue) via [psqs](https://github.com/ntBre/psqs)
 
 # Input
 An example input file for a Mopac QFF on *c*-C<sub>3</sub>H<sub>2</sub> looks like:
@@ -105,7 +92,7 @@ job_limit = 2048
 chunk_size = 1
 template = """scfcrt=1.D-21 aux(precision=14 comp xp xs xw) PM6 THREADS=1 \
 external=testfiles/params.dat"""
-check_int = 100%
+check_int = 100
 ```
 
 # qffbuddy
