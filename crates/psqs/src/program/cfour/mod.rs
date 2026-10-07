@@ -7,8 +7,6 @@ use std::{
 use regex::Regex;
 use symm::{ANGBOHR, Atom};
 
-use crate::queue::{Queue, Submit, local::Local, pbs::Pbs, slurm::Slurm};
-
 use super::{
     Job, Procedure, Program, ProgramError, ProgramResult, parse_energy,
 };
@@ -19,6 +17,10 @@ pub struct Cfour;
 static CELL: OnceLock<[Regex; 4]> = OnceLock::new();
 
 impl Program for Cfour {
+    fn command(&self, filename: &str) -> String {
+        format!("(cd {filename} && $CFOUR_CMD)")
+    }
+
     fn infile(&self, _job: &Job) -> String {
         todo!()
     }
@@ -180,70 +182,6 @@ impl Program for Cfour {
         .into_iter()
         .map(str::to_owned)
         .collect()
-    }
-}
-
-impl Submit<Cfour> for Pbs {}
-
-impl Queue<Cfour> for Pbs {
-    fn template(&self) -> &Option<String> {
-        &self.template
-    }
-
-    fn program_cmd(&self, filename: &str) -> String {
-        format!("(cd {filename} && $CFOUR_CMD)")
-    }
-
-    fn default_submit_script(&self) -> String {
-        "#!/bin/sh
-#PBS -N {{.basename}}
-#PBS -S /bin/bash
-#PBS -j oe
-#PBS -o {{.filename}}.out
-#PBS -W umask=022
-#PBS -l walltime=1000:00:00
-#PBS -l ncpus=1
-#PBS -l mem=8gb
-#PBS -q workq
-
-module load openpbs
-
-export WORKDIR=$PBS_O_WORKDIR
-cd $WORKDIR
-
-CFOUR_CMD=\"/ddnlus/r2518/bin/c4ext_new.sh $NCPUS\"
-"
-        .to_owned()
-    }
-}
-
-impl Queue<Cfour> for Slurm {
-    fn template(&self) -> &Option<String> {
-        &self.template
-    }
-
-    fn program_cmd(&self, filename: &str) -> String {
-        format!("(cd {filename} && $CFOUR_CMD)")
-    }
-
-    fn default_submit_script(&self) -> String {
-        String::new()
-    }
-}
-
-impl Submit<Cfour> for Local {}
-
-impl Queue<Cfour> for Local {
-    fn template(&self) -> &Option<String> {
-        &self.template
-    }
-
-    fn program_cmd(&self, filename: &str) -> String {
-        format!("(cd {filename} && $CFOUR_CMD)")
-    }
-
-    fn default_submit_script(&self) -> String {
-        "CFOUR_CMD=/opt/cfour/cfour\n".into()
     }
 }
 

@@ -1,18 +1,13 @@
 use std::collections::HashSet;
 
-use crate::program::dftbplus::DFTBPlus;
-use crate::program::molpro::Molpro;
-use crate::program::{Program, mopac::Mopac};
 use crate::queue::Queue;
 
-use super::{SubQueue, Submit};
-
-/// Minimal implementation for testing MOPAC locally
+/// Minimal implementation for running programs locally, primarily for tests.
 #[derive(Debug)]
 pub struct Local {
     pub dir: String,
     pub chunk_size: usize,
-    pub template: Option<String>,
+    pub template: String,
 }
 
 impl Default for Local {
@@ -20,7 +15,7 @@ impl Default for Local {
         Self {
             dir: ".".to_string(),
             chunk_size: 128,
-            template: None,
+            template: String::new(),
         }
     }
 }
@@ -32,7 +27,7 @@ impl Local {
         _sleep_int: usize,
         dir: &'static str,
         _no_del: bool,
-        template: Option<String>,
+        template: String,
     ) -> Self {
         Self {
             dir: dir.to_string(),
@@ -42,57 +37,15 @@ impl Local {
     }
 }
 
-impl Submit<Molpro> for Local {}
+impl Queue for Local {
+    fn script_ext(&self) -> &'static str {
+        "slurm"
+    }
 
-impl Queue<Molpro> for Local {
-    fn template(&self) -> &Option<String> {
+    fn template(&self) -> &str {
         &self.template
     }
 
-    fn program_cmd(&self, filename: &str) -> String {
-        format!("$MOLPRO_CMD {filename}.inp")
-    }
-
-    fn default_submit_script(&self) -> String {
-        String::new()
-    }
-}
-
-impl Submit<Mopac> for Local {}
-
-impl Queue<Mopac> for Local {
-    fn template(&self) -> &Option<String> {
-        &self.template
-    }
-
-    fn program_cmd(&self, filename: &str) -> String {
-        format!("$MOPAC_CMD {filename}.mop")
-    }
-
-    fn default_submit_script(&self) -> String {
-        "export MOPAC_CMD=/opt/mopac/mopac
-export LD_LIBRARY_PATH=/opt/mopac/\n"
-            .into()
-    }
-}
-
-impl Submit<DFTBPlus> for Local {}
-
-impl Queue<DFTBPlus> for Local {
-    fn template(&self) -> &Option<String> {
-        &self.template
-    }
-
-    fn program_cmd(&self, filename: &str) -> String {
-        format!("(cd {filename} && $DFTB_CMD > out)")
-    }
-
-    fn default_submit_script(&self) -> String {
-        "DFTB_CMD=/opt/dftb+/dftb+\n".into()
-    }
-}
-
-impl<P: Program> SubQueue<P> for Local {
     fn submit_command(&self) -> &str {
         "bash"
     }
@@ -108,8 +61,6 @@ impl<P: Program> SubQueue<P> for Local {
     fn sleep_int(&self) -> usize {
         1
     }
-
-    const SCRIPT_EXT: &'static str = "slurm";
 
     fn dir(&self) -> &str {
         &self.dir
@@ -146,27 +97,34 @@ impl<P: Program> SubQueue<P> for Local {
 mod tests {
     use insta::assert_snapshot;
 
-    use crate::program::cfour::Cfour;
+    use crate::{
+        program::{
+            cfour::Cfour, dftbplus::DFTBPlus, molpro::Molpro, mopac::Mopac,
+            orca::Orca,
+        },
+        queue::templates,
+    };
 
     use super::*;
 
-    fn local() -> Local {
+    fn local(template: &str) -> Local {
         Local {
             dir: String::new(),
             chunk_size: 0,
-            template: None,
+            template: template.to_owned(),
         }
     }
 
     macro_rules! make_tests {
-        ($($name:ident, $queue:expr => $p:ty$(,)*)*) => {
+        ($($name:ident, $queue:expr => $program:expr$(,)*)*) => {
             $(
             #[test]
             fn $name() {
                 let tmp = tempfile::NamedTempFile::new().unwrap();
-                <Local as Queue<$p>>::write_submit_script(
+                Queue::write_submit_script(
                     $queue,
-                    ["opt0.inp", "opt1.inp", "opt2.inp", "opt3.inp"].map(|s| s.into()),
+                    &$program,
+                    &["opt0", "opt1", "opt2", "opt3"].map(str::to_owned),
                     tmp.path().to_str().unwrap(),
                 );
                 let got = std::fs::read_to_string(tmp).unwrap();
@@ -180,9 +138,10 @@ mod tests {
     }
 
     make_tests! {
-        mopac_local, &local() =>  Mopac,
-        molpro_local, &local() =>  Molpro,
-        cfour_local, &local() => Cfour,
-        dftb_local, &local() => DFTBPlus,
+        mopac_local, &local(templates::LOCAL_MOPAC) => Mopac,
+        molpro_local, &local(templates::LOCAL_MOLPRO) => Molpro,
+        cfour_local, &local(templates::LOCAL_CFOUR) => Cfour,
+        dftb_local, &local(templates::LOCAL_DFTBPLUS) => DFTBPlus,
+        orca_local, &local(templates::LOCAL_ORCA) => Orca,
     }
 }
