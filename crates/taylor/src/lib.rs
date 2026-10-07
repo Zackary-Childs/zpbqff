@@ -99,41 +99,33 @@ impl Taylor {
         }
     }
 
-    /// returns the directly-derived Cartesian product row, where index is the
+    /// Original: returns the directly-derived Cartesian product row, where index is the
     /// desired row index, n is the truncation order and m is the number of
     /// variables in the Taylor series expansion. This corresponds to Algorithm
     /// 3 from Thackston18 with the meanings of n and m reversed to actually
     /// work
-    fn row(mut index: usize, n: usize, m: usize) -> Vec<usize> {
-        let mut ret = Vec::new();
-        for i in (0..n).rev() {
-            let ni = m.pow(i as u32);
-            let di = index / ni;
-            ret.push(di);
-            index -= di * ni;
-        }
-        ret
-    }
+    ///
+    /// Updated: Fill `out` with every row of exponents whose sum is less than `m`, in
+    /// increasing lexicographic order (the same order the old base-`m` index
+    /// enumeration produced). Works for any number of coordinates; the old
+    /// version numbered rows with one base-`m` integer, which overflowed once
+    /// m^n passed 2^64 (n >= 28 for m = 5).
 
-    /// takes an invalid row of the Cartesian product, the number of variables
-    /// n, and the truncation order m and returns the index of the next valid
-    /// row. This corresponds to Algorithm 4 in Thackston18
-    fn next_row(mut row: Vec<usize>, n: usize, m: usize) -> usize {
-        for i in (0..n).rev() {
-            if row[i] > 0 {
-                row[i] = 0;
-                if i > 0 {
-                    row[i - 1] += 1;
-                }
-                break;
-            }
+    fn row(
+        pos: usize,
+        remaining: usize,
+        row: &mut Vec<usize>,
+        out: &mut Vec<Vec<usize>>,
+    ) {
+        if pos == row.len() {
+            out.push(row.clone());
+            return;
         }
-        let mut index = 0;
-        let lr = row.len();
-        for i in (0..n).rev() {
-            index += row[lr - i - 1] * m.pow(i as u32);
+        for i in 0..remaining {
+            row[pos] = i;
+            Self::row(pos + 1, remaining - i, row, out);
         }
-        index
+        row[pos] = 0;
     }
 
     pub fn new(
@@ -142,35 +134,27 @@ impl Taylor {
         modchecks: Option<Checks>,
         eqchecks: Option<Checks>,
     ) -> Self {
-        let last_index = m.pow(n as u32);
+        let mut candidates = Vec::new();
+        Self::row(0, m, &mut vec![0; n], &mut candidates);
         let mut forces = Vec::new();
-        let mut i = 0;
-        while i < last_index {
-            let row = Self::row(i, n, m);
-            let s: usize = row.iter().sum();
-            if s < m {
-                let mc = if let Some(checks) = &modchecks {
-                    checks.mod_check(&row)
-                } else {
-                    true
-                };
-                let ec = if let Some(checks) = &eqchecks {
-                    checks.eq_check(&row)
-                } else {
-                    true
-                };
-                if (modchecks.is_none() && !ec)
-                    || (eqchecks.is_none() && !mc)
-                    || (!ec && !mc)
-                {
-                    i += 1;
-                    continue;
-                }
-                forces.push(row.iter().map(|&r| r as u8).collect());
-                i += 1;
+        for row in candidates {
+            let mc = if let Some(checks) = &modchecks {
+                checks.mod_check(&row)
             } else {
-                i = Self::next_row(row, n, m);
+                true
+            };
+            let ec = if let Some(checks) = &eqchecks {
+                checks.eq_check(&row)
+            } else {
+                true
+            };
+            if (modchecks.is_none() && !ec)
+                || (eqchecks.is_none() && !mc)
+                || (!ec && !mc)
+            {
+                continue;
             }
+            forces.push(row.iter().map(|&r| r as u8).collect());
         }
         Self { forces }
     }

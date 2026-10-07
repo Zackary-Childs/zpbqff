@@ -54,7 +54,11 @@ fn test_forces_large() {
         let got = Taylor::new(5, n, None, None).forces;
 
         // 1. every term of total degree <= 4 in n coordinates is present
-        assert_eq!(got.len(), n_choose_k(n + 4, 4), "wrong term count for n = {n}");
+        assert_eq!(
+            got.len(),
+            n_choose_k(n + 4, 4),
+            "wrong term count for n = {n}"
+        );
 
         // 2. no coordinate is missing from the expansion
         for i in 0..n {
@@ -67,7 +71,10 @@ fn test_forces_large() {
         // 3. every term is a valid quartic-or-lower term
         for row in &got {
             let degree: usize = row.iter().map(|&x| x as usize).sum();
-            assert!(degree <= 4, "term {row:?} has degree {degree} for n = {n}");
+            assert!(
+                degree <= 4,
+                "term {row:?} has degree {degree} for n = {n}"
+            );
         }
     }
 }
@@ -86,7 +93,7 @@ fn test_forces_with_checks() {
 
 #[test]
 fn test_forces_with_zero_checks() {
-   let got = Taylor::new(
+    let got = Taylor::new(
         5,
         3,
         Some(Checks([vec![3], vec![], vec![]])),
