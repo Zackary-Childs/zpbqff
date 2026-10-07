@@ -1,8 +1,8 @@
 ---
-source: src/queue/local.rs
+source: crates/psqs/src/queue/local.rs
 expression: got
 ---
-ORCA_CMD=orca
+ORCA_CMD=${ORCA_CMD:-orca}
 $ORCA_CMD opt0.inp > opt0.out 2>&1
 $ORCA_CMD opt1.inp > opt1.out 2>&1
 $ORCA_CMD opt2.inp > opt2.out 2>&1

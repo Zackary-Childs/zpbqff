@@ -10,14 +10,14 @@ pub const PBS_MOPAC: &str = r#"#!/bin/sh
 #PBS -l ncpus=1
 #PBS -l mem=1gb
 #PBS -q workq
+#PBS -V
 
 module load openpbs
 
 export WORKDIR=$PBS_O_WORKDIR
 cd $WORKDIR
 
-export LD_LIBRARY_PATH=/ddnlus/r2518/Packages/mopac/build
-export MOPAC_CMD=/ddnlus/r2518/Packages/mopac/build/mopac
+export MOPAC_CMD=${MOPAC_CMD:-mopac}
 "#;
 
 pub const PBS_MOLPRO: &str = r#"#!/bin/sh
@@ -30,6 +30,7 @@ pub const PBS_MOLPRO: &str = r#"#!/bin/sh
 #PBS -l ncpus=1
 #PBS -l mem=8gb
 #PBS -q workq
+#PBS -V
 
 module load openpbs molpro
 
@@ -39,7 +40,7 @@ cd $WORKDIR
 mkdir -p $TMPDIR
 trap 'rm -rf $TMPDIR' EXIT
 
-export MOLPRO_CMD="molpro -t $NCPUS --no-xml-output"
+export MOLPRO_CMD=${MOLPRO_CMD:-"molpro -t $NCPUS --no-xml-output"}
 "#;
 
 pub const PBS_CFOUR: &str = r#"#!/bin/sh
@@ -52,13 +53,14 @@ pub const PBS_CFOUR: &str = r#"#!/bin/sh
 #PBS -l ncpus=1
 #PBS -l mem=8gb
 #PBS -q workq
+#PBS -V
 
 module load openpbs
 
 export WORKDIR=$PBS_O_WORKDIR
 cd $WORKDIR
 
-CFOUR_CMD="/ddnlus/r2518/bin/c4ext_new.sh $NCPUS"
+export CFOUR_CMD=${CFOUR_CMD:-xcfour}
 "#;
 
 pub const PBS_DFTBPLUS: &str = r#"#!/bin/sh
@@ -71,13 +73,14 @@ pub const PBS_DFTBPLUS: &str = r#"#!/bin/sh
 #PBS -l ncpus=1
 #PBS -l mem=8gb
 #PBS -q workq
+#PBS -V
 
 module load openpbs
 
 export WORKDIR=$PBS_O_WORKDIR
 cd $WORKDIR
 
-export DFTB_CMD=/ddnlus/r2518/.conda/envs/dftb/bin/dftb+
+export DFTB_CMD=${DFTB_CMD:-dftb+}
 "#;
 
 pub const PBS_ORCA: &str = r#"#!/bin/bash
@@ -89,11 +92,12 @@ pub const PBS_ORCA: &str = r#"#!/bin/bash
 #PBS -l nodes=1:ppn=8
 #PBS -l walltime=2150:00:00
 #PBS -q workq
+#PBS -V
 
 module load openpbs
 
 export OMP_NUM_THREADS=8
-export ORCA_DIR=/ddnlus/r3750/orca/orca_6_1_1_linux_x86-64_shared_openmpi418_nodmrg
+export ORCA_DIR=${ORCA_DIR:-$(dirname "$(command -v orca)")}
 export XTBEXE=$ORCA_DIR/xtb/xtb-dist/bin/xtb
 export PATH=$ORCA_DIR:$ORCA_DIR/xtb/xtb-dist/bin:$PATH
 export WORKDIR=$PBS_O_WORKDIR
@@ -120,15 +124,67 @@ run_orca() {
 ORCA_CMD=run_orca
 "#;
 
-pub const SLURM_MOPAC: &str = include_str!("../../templates/slurm/mopac");
-pub const SLURM_MOLPRO: &str = include_str!("../../templates/slurm/molpro");
-pub const SLURM_CFOUR: &str = "";
-pub const SLURM_DFTBPLUS: &str = "";
-pub const SLURM_ORCA: &str = "ORCA_CMD=orca\n";
+pub const SLURM_MOPAC: &str = r#"#!/bin/bash
+#SBATCH --job-name={{.basename}}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH -o {{.filename}}.out
+#SBATCH --no-requeue
+#SBATCH --mem=1gb
+ 
+export MOPAC_CMD=${MOPAC_CMD:-mopac}
+echo $SLURM_JOB_ID
+date
+hostname
+"#;
+ 
+pub const SLURM_MOLPRO: &str = r#"#!/bin/bash
+#SBATCH --job-name={{.basename}}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH -o {{.filename}}.out
+#SBATCH --no-requeue
+#SBATCH --mem=8gb
+ 
+export MOLPRO_CMD=${MOLPRO_CMD:-"molpro -t 1 --no-xml-output"}
+"#;
+ 
+pub const SLURM_CFOUR: &str = r#"#!/bin/bash
+#SBATCH --job-name={{.basename}}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH -o {{.filename}}.out
+#SBATCH --no-requeue
+#SBATCH --mem=8gb
+ 
+export CFOUR_CMD=${CFOUR_CMD:-xcfour}
+"#;
+ 
+pub const SLURM_DFTBPLUS: &str = r#"#!/bin/bash
+#SBATCH --job-name={{.basename}}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH -o {{.filename}}.out
+#SBATCH --no-requeue
+#SBATCH --mem=8gb
+ 
+export DFTB_CMD=${DFTB_CMD:-dftb+}
+"#;
+ 
+pub const SLURM_ORCA: &str = r#"#!/bin/bash
+#SBATCH --job-name={{.basename}}
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH -o {{.filename}}.out
+#SBATCH --no-requeue
+#SBATCH --mem=8gb
+ 
+export ORCA_CMD=${ORCA_CMD:-orca}
+"#;
 
-pub const LOCAL_MOPAC: &str = "export MOPAC_CMD=/opt/mopac/mopac
-export LD_LIBRARY_PATH=/opt/mopac/\n";
+pub const LOCAL_MOPAC: &str = "export MOPAC_CMD=${MOPAC_CMD:-/opt/mopac/mopac}
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-/opt/mopac/}\n";
 pub const LOCAL_MOLPRO: &str = "";
-pub const LOCAL_CFOUR: &str = "CFOUR_CMD=/opt/cfour/cfour\n";
-pub const LOCAL_DFTBPLUS: &str = "DFTB_CMD=/opt/dftb+/dftb+\n";
-pub const LOCAL_ORCA: &str = "ORCA_CMD=orca\n";
+pub const LOCAL_CFOUR: &str = "CFOUR_CMD=${CFOUR_CMD:-/opt/cfour/cfour}\n";
+pub const LOCAL_DFTBPLUS: &str = "DFTB_CMD=${DFTB_CMD:-/opt/dftb+/dftb+}\n";
+pub const LOCAL_ORCA: &str = "ORCA_CMD=${ORCA_CMD:-orca}\n";

@@ -1,5 +1,5 @@
 ---
-source: src/queue/pbs.rs
+source: crates/psqs/src/queue/pbs.rs
 expression: got
 ---
 #!/bin/sh
@@ -10,14 +10,14 @@ expression: got
 #PBS -l ncpus=1
 #PBS -l mem=1gb
 #PBS -q workq
+#PBS -V
 
 module load openpbs
 
 export WORKDIR=$PBS_O_WORKDIR
 cd $WORKDIR
 
-export LD_LIBRARY_PATH=/ddnlus/r2518/Packages/mopac/build
-export MOPAC_CMD=/ddnlus/r2518/Packages/mopac/build/mopac
+export MOPAC_CMD=${MOPAC_CMD:-mopac}
 $MOPAC_CMD pts/opt0.mop
 $MOPAC_CMD pts/opt1.mop
 $MOPAC_CMD pts/opt2.mop

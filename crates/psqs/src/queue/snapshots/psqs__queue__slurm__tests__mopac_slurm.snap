@@ -1,5 +1,5 @@
 ---
-source: src/queue/slurm.rs
+source: crates/psqs/src/queue/slurm.rs
 expression: got
 ---
 #!/bin/bash
@@ -7,8 +7,8 @@ expression: got
 #SBATCH --cpus-per-task=1
 #SBATCH --no-requeue
 #SBATCH --mem=1gb
-export LD_LIBRARY_PATH=/home/qc/mopac2016/
-export MOPAC_CMD=/home/qc/mopac2016/MOPAC2016.exe
+ 
+export MOPAC_CMD=${MOPAC_CMD:-mopac}
 echo $SLURM_JOB_ID
 date
 hostname

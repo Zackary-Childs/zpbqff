@@ -1,8 +1,8 @@
 ---
-source: src/queue/local.rs
+source: crates/psqs/src/queue/local.rs
 expression: got
 ---
-DFTB_CMD=/opt/dftb+/dftb+
+DFTB_CMD=${DFTB_CMD:-/opt/dftb+/dftb+}
 (cd opt0 && $DFTB_CMD > out)
 (cd opt1 && $DFTB_CMD > out)
 (cd opt2 && $DFTB_CMD > out)

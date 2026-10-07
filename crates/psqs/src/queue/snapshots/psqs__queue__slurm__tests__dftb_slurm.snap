@@ -1,7 +1,14 @@
 ---
-source: src/queue/slurm.rs
+source: crates/psqs/src/queue/slurm.rs
 expression: got
 ---
+#!/bin/bash
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --no-requeue
+#SBATCH --mem=8gb
+ 
+export DFTB_CMD=${DFTB_CMD:-dftb+}
 (cd opt0 && $DFTB_CMD > out)
 (cd opt1 && $DFTB_CMD > out)
 (cd opt2 && $DFTB_CMD > out)

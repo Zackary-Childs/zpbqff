@@ -1,5 +1,5 @@
 ---
-source: src/queue/pbs.rs
+source: crates/psqs/src/queue/pbs.rs
 expression: got
 ---
 #!/bin/bash
@@ -9,11 +9,12 @@ expression: got
 #PBS -l nodes=1:ppn=8
 #PBS -l walltime=2150:00:00
 #PBS -q workq
+#PBS -V
 
 module load openpbs
 
 export OMP_NUM_THREADS=8
-export ORCA_DIR=/ddnlus/r3750/orca/orca_6_1_1_linux_x86-64_shared_openmpi418_nodmrg
+export ORCA_DIR=${ORCA_DIR:-$(dirname "$(command -v orca)")}
 export XTBEXE=$ORCA_DIR/xtb/xtb-dist/bin/xtb
 export PATH=$ORCA_DIR:$ORCA_DIR/xtb/xtb-dist/bin:$PATH
 export WORKDIR=$PBS_O_WORKDIR

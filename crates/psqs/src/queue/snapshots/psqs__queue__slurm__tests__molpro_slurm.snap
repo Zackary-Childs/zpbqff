@@ -1,5 +1,5 @@
 ---
-source: src/queue/slurm.rs
+source: crates/psqs/src/queue/slurm.rs
 expression: got
 ---
 #!/bin/bash
@@ -7,8 +7,8 @@ expression: got
 #SBATCH --cpus-per-task=1
 #SBATCH --no-requeue
 #SBATCH --mem=8gb
-
-MOLPRO_CMD="/home/qc/bin/molpro2020.sh 1 1"
+ 
+export MOLPRO_CMD=${MOLPRO_CMD:-"molpro -t 1 --no-xml-output"}
 $MOLPRO_CMD opt0.inp
 $MOLPRO_CMD opt1.inp
 $MOLPRO_CMD opt2.inp

@@ -1,5 +1,5 @@
 ---
-source: src/queue/pbs.rs
+source: crates/psqs/src/queue/pbs.rs
 expression: got
 ---
 #!/bin/sh
@@ -10,13 +10,14 @@ expression: got
 #PBS -l ncpus=1
 #PBS -l mem=8gb
 #PBS -q workq
+#PBS -V
 
 module load openpbs
 
 export WORKDIR=$PBS_O_WORKDIR
 cd $WORKDIR
 
-CFOUR_CMD="/ddnlus/r2518/bin/c4ext_new.sh $NCPUS"
+export CFOUR_CMD=${CFOUR_CMD:-xcfour}
 (cd pts/opt0 && $CFOUR_CMD)
 (cd pts/opt1 && $CFOUR_CMD)
 (cd pts/opt2 && $CFOUR_CMD)

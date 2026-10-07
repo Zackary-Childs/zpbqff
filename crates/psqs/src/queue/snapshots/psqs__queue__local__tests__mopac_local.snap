@@ -1,9 +1,9 @@
 ---
-source: src/queue/local.rs
+source: crates/psqs/src/queue/local.rs
 expression: got
 ---
-export MOPAC_CMD=/opt/mopac/mopac
-export LD_LIBRARY_PATH=/opt/mopac/
+export MOPAC_CMD=${MOPAC_CMD:-/opt/mopac/mopac}
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:-/opt/mopac/}
 $MOPAC_CMD opt0.mop
 $MOPAC_CMD opt1.mop
 $MOPAC_CMD opt2.mop

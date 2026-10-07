@@ -1,5 +1,5 @@
 ---
-source: src/queue/pbs.rs
+source: crates/psqs/src/queue/pbs.rs
 expression: got
 ---
 #!/bin/sh
@@ -10,6 +10,7 @@ expression: got
 #PBS -l ncpus=1
 #PBS -l mem=8gb
 #PBS -q workq
+#PBS -V
 
 module load openpbs molpro
 
@@ -19,7 +20,7 @@ cd $WORKDIR
 mkdir -p $TMPDIR
 trap 'rm -rf $TMPDIR' EXIT
 
-export MOLPRO_CMD="molpro -t $NCPUS --no-xml-output"
+export MOLPRO_CMD=${MOLPRO_CMD:-"molpro -t $NCPUS --no-xml-output"}
 $MOLPRO_CMD opt0.inp
 $MOLPRO_CMD opt1.inp
 $MOLPRO_CMD opt2.inp
