@@ -137,7 +137,7 @@ echo $SLURM_JOB_ID
 date
 hostname
 "#;
- 
+
 pub const SLURM_MOLPRO: &str = r#"#!/bin/bash
 #SBATCH --job-name={{.basename}}
 #SBATCH --ntasks=1
@@ -148,7 +148,7 @@ pub const SLURM_MOLPRO: &str = r#"#!/bin/bash
  
 export MOLPRO_CMD=${MOLPRO_CMD:-"molpro -t 1 --no-xml-output"}
 "#;
- 
+
 pub const SLURM_CFOUR: &str = r#"#!/bin/bash
 #SBATCH --job-name={{.basename}}
 #SBATCH --ntasks=1
@@ -159,7 +159,7 @@ pub const SLURM_CFOUR: &str = r#"#!/bin/bash
  
 export CFOUR_CMD=${CFOUR_CMD:-xcfour}
 "#;
- 
+
 pub const SLURM_DFTBPLUS: &str = r#"#!/bin/bash
 #SBATCH --job-name={{.basename}}
 #SBATCH --ntasks=1
@@ -170,7 +170,7 @@ pub const SLURM_DFTBPLUS: &str = r#"#!/bin/bash
  
 export DFTB_CMD=${DFTB_CMD:-dftb+}
 "#;
- 
+
 pub const SLURM_ORCA: &str = r#"#!/bin/bash
 #SBATCH --job-name={{.basename}}
 #SBATCH --ntasks=1

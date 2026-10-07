@@ -149,6 +149,7 @@ fn main() -> Result<(), std::io::Error> {
         };
         return Ok(());
     }
+    let config = Config::load(&args.infile);
     let path = Path::new("pbqff.out");
     if path.exists() && !args.overwrite {
         die!("existing pbqff output. overwrite with -o/--overwrite");
@@ -162,7 +163,6 @@ fn main() -> Result<(), std::io::Error> {
         libc::dup2(out_fd, 1);
         libc::dup2(log_fd, 2);
     }
-    let config = Config::load(&args.infile);
     println!("PID: {}", std::process::id());
     println!("version: {}", version());
     psqs::max_threads(args.threads);

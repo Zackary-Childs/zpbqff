@@ -99,12 +99,6 @@ impl Taylor {
         }
     }
 
-    /// Original: returns the directly-derived Cartesian product row, where index is the
-    /// desired row index, n is the truncation order and m is the number of
-    /// variables in the Taylor series expansion. This corresponds to Algorithm
-    /// 3 from Thackston18 with the meanings of n and m reversed to actually
-    /// work
-    ///
     /// Updated: Fill `out` with every row of exponents whose sum is less than `m`, in
     /// increasing lexicographic order (the same order the old base-`m` index
     /// enumeration produced). Works for any number of coordinates; the old
