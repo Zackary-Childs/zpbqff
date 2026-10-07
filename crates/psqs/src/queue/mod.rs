@@ -67,32 +67,43 @@ pub trait Queue: Sync + Debug {
 
     /// Submit `filename` to the queue and return the job ID.
     fn submit(&self, _program: &dyn Program, filename: &str) -> String {
-        loop {
+        const MAX_ATTEMPTS: u64 = 10;
+        let mut wait = 1;
+        for attempt in 1..=MAX_ATTEMPTS {
             match Command::new(self.submit_command()).arg(filename).output() {
+                Ok(s) if s.status.success() => {
+                    let raw =
+                        str::from_utf8(&s.stdout).unwrap().trim().to_string();
+                    return raw
+                        .split_whitespace()
+                        .last()
+                        .unwrap_or("")
+                        .to_string();
+                }
                 Ok(s) => {
-                    if s.status.success() {
-                        let raw = str::from_utf8(&s.stdout)
-                            .unwrap()
-                            .trim()
-                            .to_string();
-                        return raw
-                            .split_whitespace()
-                            .last()
-                            .unwrap_or("")
-                            .to_string();
-                    }
-                    log::warn!(
-                        "failed to submit {filename} with `{}`",
-                        String::from_utf8_lossy(&s.stderr)
+                    eprintln!(
+                        "failed to submit {filename} (attempt {attempt}/{MAX_ATTEMPTS}): {}",
+                        String::from_utf8_lossy(&s.stderr).trim()
                     );
                     if *NO_RESUB {
                         std::process::exit(1);
                     }
-                    std::thread::sleep(Duration::from_secs(1));
                 }
-                Err(e) => panic!("{e:?}"),
+                Err(e) => {
+                    panic!("failed to run '{}': {e:?}", self.submit_command())
+                }
             };
+
+            std::thread::sleep(Duration::from_secs(wait));
+            wait = (wait * 2).min(60);
         }
+
+        eprintln!(
+            "giving up on submitting {filename} after {MAX_ATTEMPTS} failed submissions; \
+        check the queue template and that '{}' works here",
+            self.submit_command()
+        );
+        std::process::exit(1);
     }
 
     fn write_submit_script(
