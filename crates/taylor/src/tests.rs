@@ -38,6 +38,40 @@ fn test_forces() {
     assert_eq!(got, want);
 }
 
+/// number of ways to choose k items from n, computed one step at a time so it
+/// stays exact and never overflows for the sizes used here
+fn n_choose_k(n: usize, k: usize) -> usize {
+    let mut ans = 1;
+    for i in 0..k {
+        ans = ans * (n - i) / (i + 1);
+    }
+    ans
+}
+
+#[test]
+fn test_forces_large() {
+    for n in [10, 27, 28, 30] {
+        let got = Taylor::new(5, n, None, None).forces;
+
+        // 1. every term of total degree <= 4 in n coordinates is present
+        assert_eq!(got.len(), n_choose_k(n + 4, 4), "wrong term count for n = {n}");
+
+        // 2. no coordinate is missing from the expansion
+        for i in 0..n {
+            assert!(
+                got.iter().any(|row| row[i] > 0),
+                "coordinate {i} never appears for n = {n}"
+            );
+        }
+
+        // 3. every term is a valid quartic-or-lower term
+        for row in &got {
+            let degree: usize = row.iter().map(|&x| x as usize).sum();
+            assert!(degree <= 4, "term {row:?} has degree {degree} for n = {n}");
+        }
+    }
+}
+
 #[test]
 fn test_forces_with_checks() {
     let got = Taylor::new(
@@ -52,7 +86,7 @@ fn test_forces_with_checks() {
 
 #[test]
 fn test_forces_with_zero_checks() {
-    let got = Taylor::new(
+   let got = Taylor::new(
         5,
         3,
         Some(Checks([vec![3], vec![], vec![]])),
