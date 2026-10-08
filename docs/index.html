@@ -1,194 +1,196 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>pbqff: push-button quartic force fields</title>
 	<link rel="icon" type="image/png" href="favicon.ico">
 	<style>
-	  body {
-		  width:60%;
-		  margin-left: auto;
-		  margin-right: auto;
-		  margin-bottom: 20%;
-	  }
-	  pre {
-		  word-wrap: normal;
-		  overflow-x: auto;
-		  background-color: rgb(245, 245, 245);
-		  padding: 10px;
-	  }
-	  table {
-		  border-collapse: collapse;
-		  border: 2px solid rgb(140 140 140);
-		  font-family: sans-serif;
-		  font-size: 0.8rem;
-		  letter-spacing: 1px;
-	  }
-	  caption {
-		  caption-side: bottom;
-		  padding: 10px;
-		  font-weight: bold;
-	  }
-	  th, td {
-		  padding: 8px 10px;
-		  text-align: left;
-	  }
-	  h2 a, h3 a, h4 a, h5 a {
-		  text-decoration: none;
-		  color: inherit;
-	  }
-	  h2 a:hover, h3 a:hover, h4 a:hover, h5 a:hover {
-		  text-decoration: underline;
-	  }
+		body {
+			width: 60%;
+			margin-left: auto;
+			margin-right: auto;
+			margin-bottom: 20%;
+		}
+
+		pre {
+			word-wrap: normal;
+			overflow-x: auto;
+			background-color: rgb(245, 245, 245);
+			padding: 10px;
+		}
+
+		table {
+			border-collapse: collapse;
+			border: 2px solid rgb(140 140 140);
+			font-family: sans-serif;
+			font-size: 0.8rem;
+			letter-spacing: 1px;
+		}
+
+		caption {
+			caption-side: bottom;
+			padding: 10px;
+			font-weight: bold;
+		}
+
+		th,
+		td {
+			padding: 8px 10px;
+			text-align: left;
+		}
+
+		h2 a,
+		h3 a,
+		h4 a,
+		h5 a {
+			text-decoration: none;
+			color: inherit;
+		}
+
+		h2 a:hover,
+		h3 a:hover,
+		h4 a:hover,
+		h5 a:hover {
+			text-decoration: underline;
+		}
 	</style>
 	<script src=qffbuddy.js></script>
-  </head>
-  <body>
+</head>
+
+<body>
 	<h1>pbqff</h1>
 
 	<p>
-	  This page contains the complete documentation for pbqff as a single HTML
-	  page. For a quick reference see
-	  the <a href="https://github.com/ntBre/pbqff/tree/master/man">man</a>
-	  directory in the main repository, where you can find a manual page in both
-	  Unix <code>man</code> and PDF formats.
+		This page contains the complete documentation for pbqff as a single HTML
+		page. For a quick reference see
+		the <a href="https://github.com/ntBre/pbqff/tree/master/man">man</a>
+		directory in the main repository, where you can find a manual page in both
+		Unix <code>man</code> and PDF formats.
 	</p>
 
 	<h2>Table of Contents</h2>
 	<ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#program-input">Program Input</a></li>
-<ul>
-<li><a href="#example-input-file">Example Input File</a></li>
-<li><a href="#summary-of-input-options">Summary of Input Options</a></li>
-</ul>
-<ul>
-<li><a href="#geometry-specification-and-optimization">Geometry Specification and Optimization</a></li>
-<li><a href="#charge">Charge</a></li>
-<li><a href="#step-size">Step Size</a></li>
-<li><a href="#sleep-interval">Sleep Interval</a></li>
-<li><a href="#job-limit-and-chunk-size">Job Limit and Chunk Size</a></li>
-<ul>
-<li><a href="#rules-of-thumb">Rules of Thumb</a></li>
-</ul>
-<li><a href="#coordinate-types">Coordinate Types</a></li>
-<ul>
-<li><a href="#cartesian-coordinates">Cartesian Coordinates</a></li>
-<li><a href="#normal-coordinates">Normal Coordinates</a></li>
-<li><a href="#symmetry-internal-coordinates">Symmetry-Internal Coordinates</a></li>
-</ul>
-<li><a href="#quantum-chemistry-program-types">Quantum Chemistry Program Types</a></li>
-<li><a href="#queue-types">Queue Types</a></li>
-<li><a href="#quantum-chemistry-program-templates">Quantum Chemistry Program Templates</a></li>
-<ul>
-<li><a href="#mopac">MOPAC</a></li>
-<li><a href="#molpro">Molpro</a></li>
-<li><a href="#cfour">CFOUR</a></li>
-<li><a href="#dftb+">DFTB+</a></li>
-</ul>
-<li><a href="#queue-templates">Queue Templates</a></li>
-<ul>
-<li><a href="#pbs">PBS</a></li>
-<ul>
-<li><a href="#mopac-">MOPAC </a></li>
-<li><a href="#molpro-">Molpro </a></li>
-<li><a href="#cfour-">CFOUR </a></li>
-<li><a href="#dftb+-">DFTB+ </a></li>
-</ul>
-<li><a href="#slurm">Slurm</a></li>
-<ul>
-<li><a href="#mopac--">MOPAC  </a></li>
-<li><a href="#molpro--">Molpro  </a></li>
-<li><a href="#cfour--">CFOUR  </a></li>
-<li><a href="#dftb+--">DFTB+  </a></li>
-</ul>
-<li><a href="#local">Local</a></li>
-<ul>
-<li><a href="#mopac---">MOPAC   </a></li>
-<li><a href="#dftb+---">DFTB+   </a></li>
-<li><a href="#molpro---">Molpro   </a></li>
-<li><a href="#cfour---">CFOUR   </a></li>
-</ul>
-</ul>
-<li><a href="#derivative-types">Derivative Types</a></li>
-<li><a href="#checkpoints">Checkpoints</a></li>
-<li><a href="#atomic-masses">Atomic Masses</a></li>
-<ul>
-<li><a href="#example">Example</a></li>
-</ul>
-<li><a href="#dummy-atoms">Dummy Atoms</a></li>
-<li><a href="#resuming-normal-coordinate-qffs">Resuming Normal Coordinate QFFs</a></li>
-</ul>
-<li><a href="#command-line-options">Command Line Options</a></li>
-<li><a href="#qffbuddy">qffbuddy</a></li>
-</ul>
+		<li><a href="#introduction">Introduction</a></li>
+		<li><a href="#program-input">Program Input</a></li>
+		<ul>
+			<li><a href="#example-input-file">Example Input File</a></li>
+			<li><a href="#summary-of-input-options">Summary of Input Options</a></li>
+		</ul>
+		<ul>
+			<li><a href="#geometry-specification-and-optimization">Geometry Specification and Optimization</a></li>
+			<li><a href="#charge">Charge</a></li>
+			<li><a href="#step-size">Step Size</a></li>
+			<li><a href="#sleep-interval">Sleep Interval</a></li>
+			<li><a href="#job-limit-and-chunk-size">Job Limit and Chunk Size</a></li>
+			<ul>
+				<li><a href="#rules-of-thumb">Rules of Thumb</a></li>
+			</ul>
+			<li><a href="#coordinate-types">Coordinate Types</a></li>
+			<ul>
+				<li><a href="#cartesian-coordinates">Cartesian Coordinates</a></li>
+				<li><a href="#normal-coordinates">Normal Coordinates</a></li>
+				<li><a href="#symmetry-internal-coordinates">Symmetry-Internal Coordinates</a></li>
+			</ul>
+			<li><a href="#quantum-chemistry-program-types">Quantum Chemistry Program Types</a></li>
+			<li><a href="#queue-types">Queue Types</a></li>
+			<li><a href="#quantum-chemistry-program-templates">Quantum Chemistry Program Templates</a></li>
+			<ul>
+				<li><a href="#mopac">MOPAC</a></li>
+				<li><a href="#molpro">Molpro</a></li>
+				<li><a href="#cfour">CFOUR</a></li>
+				<li><a href="#dftb+">DFTB+</a></li>
+			</ul>
+			<li><a href="#queue-templates">Queue Templates</a></li>
+			<ul>
+				<li><a href="#pbs">PBS</a></li>
+				<ul>
+					<li><a href="#mopac-">MOPAC </a></li>
+					<li><a href="#molpro-">Molpro </a></li>
+					<li><a href="#cfour-">CFOUR </a></li>
+					<li><a href="#dftb+-">DFTB+ </a></li>
+				</ul>
+				<li><a href="#slurm">Slurm</a></li>
+				<ul>
+					<li><a href="#mopac--">MOPAC </a></li>
+					<li><a href="#molpro--">Molpro </a></li>
+					<li><a href="#cfour--">CFOUR </a></li>
+					<li><a href="#dftb+--">DFTB+ </a></li>
+				</ul>
+				<li><a href="#local">Local</a></li>
+				<ul>
+					<li><a href="#mopac---">MOPAC </a></li>
+					<li><a href="#dftb+---">DFTB+ </a></li>
+					<li><a href="#molpro---">Molpro </a></li>
+					<li><a href="#cfour---">CFOUR </a></li>
+				</ul>
+			</ul>
+			<li><a href="#derivative-types">Derivative Types</a></li>
+			<li><a href="#checkpoints">Checkpoints</a></li>
+			<li><a href="#atomic-masses">Atomic Masses</a></li>
+			<ul>
+				<li><a href="#example">Example</a></li>
+			</ul>
+			<li><a href="#dummy-atoms">Dummy Atoms</a></li>
+			<li><a href="#resuming-normal-coordinate-qffs">Resuming Normal Coordinate QFFs</a></li>
+		</ul>
+		<li><a href="#command-line-options">Command Line Options</a></li>
+		<li><a href="#qffbuddy">qffbuddy</a></li>
+	</ul>
 
 
 	<h2 id=introduction><a href="#introduction">Introduction</a></h2>
 
 	<p>
-	  pbqff is a package (really a collection of packages) for computing
-	  anharmonic vibrational and rotational spectroscopic constants for small
-	  molecules. It does this through the use of quartic force fields (QFFs) to
-	  approximate the molecular potential energy function and second-order
-	  vibrational and rotational perturbation theory, which utilize the
-	  derivative information from the function approximation to compute the
-	  actual spectroscopic constants.
+		pbqff is a package (really a collection of packages) for computing
+		anharmonic vibrational and rotational spectroscopic constants for small
+		molecules. It does this through the use of quartic force fields (QFFs) to
+		approximate the molecular potential energy function and second-order
+		vibrational and rotational perturbation theory, which utilize the
+		derivative information from the function approximation to compute the
+		actual spectroscopic constants.
 	</p>
 
 	<p>
-	  Because this is a complex task, pbqff is broken into several reusable
-	  components, only the final piece of which is included in this repository.
-	  Other major components include:
+		Because this is a complex task, pbqff is broken into several reusable
+		components, only the final piece of which is included in this repository.
+		Other major components include:
 	</p>
 
 	<ul>
-	  <li>
-		<a href="https://github.com/ntBre/symm">symm</a> for the
-		main <code>Molecule</code> data structure and symmetry operations
-	  </li>
-	  <li>
-		<a href="https://github.com/ntBre/psqs">psqs</a> for interfaces to
-		quantum chemistry programs and distributed queuing systems
-	  </li>
-	  <li>
-		<a href="https://github.com/ntBre/spectro">spectro</a> for the final
-		spectroscopic calculations
-	  </li>
+		<li>
+			<a href="https://github.com/ntBre/symm">symm</a> for the
+			main <code>Molecule</code> data structure and symmetry operations
+		</li>
+		<li>
+			<a href="https://github.com/ntBre/psqs">psqs</a> for interfaces to
+			quantum chemistry programs and distributed queuing systems
+		</li>
+		<li>
+			<a href="https://github.com/ntBre/spectro">spectro</a> for the final
+			spectroscopic calculations
+		</li>
 	</ul>
 
 	<p>
-	  pbqff itself is a relatively thin wrapper around these packages that
-	  primarily handles tasks like generating the grid of displaced geometries
-	  to map out the QFF in various coordinate systems. This fact isn't really
-	  important directly, but it may help to explain some of the potential error
-	  messages you encounter, if they reference source code
-	  in <code>psqs</code>, for example.
+		pbqff itself is a relatively thin wrapper around these packages that
+		primarily handles tasks like generating the grid of displaced geometries
+		to map out the QFF in various coordinate systems. This fact isn't really
+		important directly, but it may help to explain some of the potential error
+		messages you encounter, if they reference source code
+		in <code>psqs</code>, for example.
 	</p>
 
 	<h2 id=program-input><a href="#program-input">Program Input</a></h2>
 
 	<p>
-	  The primary input for pbqff is a <a href="https://toml.io/en/">TOML</a>
-	  file. TOML as a format is widely used in the Rust community and is pretty
-	  easy for humans to write, although you will end up having to type a lot of
-	  quotes compared to something like YAML. To start, here's an example input
-	  file for a <a href="https://github.com/openmopac/mopac">MOPAC</a> QFF on a
-	  PBS queue:
+		The primary input for pbqff is a <a href="https://toml.io/en/">TOML</a>
+		file. TOML as a format is widely used in the Rust community and is pretty
+		easy for humans to write, although you will end up having to type a lot of
+		quotes compared to something like YAML. To start, here's an example input
+		file for a <a href="https://github.com/openmopac/mopac">MOPAC</a> QFF on a
+		PBS queue:
 	</p>
 
 	<h4 id=example-input-file><a href="#example-input-file">Example Input File</a></h4>
@@ -238,136 +240,137 @@ findiff = true
 check_int = 0</code></pre>
 
 	<p>
-	  In addition to the options specified here, there are a few other optional
-	  values like <code>hybrid_template</code> for specifying a separate quantum
-	  chemistry program template for the cubic and quartic force
-	  constants, <code>weights</code> for specifying atomic
-	  weights, <code>dummy_atoms</code> for specifying a number of trailing
-	  dummy atoms, and the very specialized <code>norm_resume_hff</code> for
-	  resuming a normal coordinate QFF from the finished Cartesian harmonic
-	  force field (HFF). A summary of all the possible input options is given in
-	  the table below, followed by a more detailed description of each option.
+		In addition to the options specified here, there are a few other optional
+		values like <code>hybrid_template</code> for specifying a separate quantum
+		chemistry program template for the cubic and quartic force
+		constants, <code>weights</code> for specifying atomic
+		weights, <code>dummy_atoms</code> for specifying a number of trailing
+		dummy atoms, and the very specialized <code>norm_resume_hff</code> for
+		resuming a normal coordinate QFF from the finished Cartesian harmonic
+		force field (HFF). A summary of all the possible input options is given in
+		the table below, followed by a more detailed description of each option.
 	</p>
 
 	<h4 id=summary-of-input-options><a href="#summary-of-input-options">Summary of Input Options</a></h4>
 
 	<table>
-	  <tr>
-		<th>Option</th>
-		<th>Type</th>
-		<th>Description</th>
-	  </tr>
-	  <tr>
-		<td><code>geometry</code></td>
-		<td>String</td>
-		<td>The initial molecular geometry as XYZ or Z-matrix</td>
-	  </tr>
-	  <tr>
-		<td><code>optimize</code></td>
-		<td>bool</td>
-		<td>Whether or not to optimize the geometry before running the QFF</td>
-	  </tr>
-	  <tr>
-		<td><code>charge</code></td>
-		<td>isize</td>
-		<td>The molecular charge</td>
-	  </tr>
-	  <tr>
-		<td><code>step_size</code></td>
-		<td>f64</td>
-		<td>The displacement size for the QFF in Å</td>
-	  </tr>
-	  <tr>
-		<td><code>sleep_int</code></td>
-		<td>usize</td>
-		<td>Interval in seconds to sleep between job polling iterations</td>
-	  </tr>
-	  <tr>
-		<td><code>job_limit</code></td>
-		<td>usize</td>
-		<td>Maximum number of jobs to submit to the queue at once</td>
-	  </tr>
-	  <tr>
-		<td><code>chunk_size</code></td>
-		<td>usize</td>
-		<td>Number of jobs to combine into a single queue submission</td>
-	  </tr>
-	  <tr>
-		<td><code>coord_type</code></td>
-		<td>CoordType</td>
-		<td>Displacement type for the QFF. Supported values are sic, cart, and
-		norm</td>
-	  </tr>
-	  <tr>
-		<td><code>template</code></td>
-		<td>TemplateSrc</td>
-		<td>Quantum chemistry program template. Can either be a literal String
-		or a map with the key <code>file</code></td>
-	  </tr>
-	  <tr>
-		<td><code>hybrid_template</code></td>
-		<td> Option&lt;TemplateSrc&gt;</td>
-		<td>Separate quantum chemistry program template for cubic and quartic
-		force constants</td>
-	  </tr>
-	  <tr>
-		<td><code>queue_template</code></td>
-		<td> Option&lt;TemplateSrc&gt;</td>
-		<td>Queuing system template</td>
-	  </tr>
-	  <tr>
-		<td><code>program</code></td>
-		<td>Program</td>
-		<td>A quantum chemistry program name. Supported values are dftb+, mopac,
-		molpro, and cfour</td>
-	  </tr>
-	  <tr>
-		<td><code>queue</code></td>
-		<td> Queue</td>
-		<td>A queuing system. Supported values are pbs, slurm, and local</td>
-	  </tr>
-	  <tr>
-		<td><code>findiff</code></td>
-		<td> Option&lt;bool&gt;</td>
-		<td>Whether to use finite differences for derivative evaluations. Not
-		all coordinate types support this</td>
-	  </tr>
-	  <tr>
-		<td><code>check_int</code></td>
-		<td>usize</td>
-		<td>Interval in polling iterations to write checkpoints. A value of 0
-		disables checkpoints</td>
-	  </tr>
-	  <tr>
-		<td><code>weights</code></td>
-		<td> Option&lt;Vec&lt;f64&gt;&gt;</td>
-		<td>An optional sequence of atomic masses for use in normal coordinate
-		QFFs and spectroscopic calculations</td>
-	  </tr>
-	  <tr>
-		<td><code>dummy_atoms</code></td>
-		<td> Option&lt;usize&gt;</td>
-		<td>An optional number of trailing dummy atoms</td>
-	  </tr>
-	  <tr>
-		<td><code>norm_resume_hff</code></td>
-		<td>Option&lt;bool&gt;</td>
-		<td>Resume a normal coordinate QFF from a previously-finished HFF
-		checkpoint</td>
-	  </tr>
+		<tr>
+			<th>Option</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+		<tr>
+			<td><code>geometry</code></td>
+			<td>String</td>
+			<td>The initial molecular geometry as XYZ or Z-matrix</td>
+		</tr>
+		<tr>
+			<td><code>optimize</code></td>
+			<td>bool</td>
+			<td>Whether or not to optimize the geometry before running the QFF</td>
+		</tr>
+		<tr>
+			<td><code>charge</code></td>
+			<td>isize</td>
+			<td>The molecular charge</td>
+		</tr>
+		<tr>
+			<td><code>step_size</code></td>
+			<td>f64</td>
+			<td>The displacement size for the QFF in Å</td>
+		</tr>
+		<tr>
+			<td><code>sleep_int</code></td>
+			<td>usize</td>
+			<td>Interval in seconds to sleep between job polling iterations</td>
+		</tr>
+		<tr>
+			<td><code>job_limit</code></td>
+			<td>usize</td>
+			<td>Maximum number of jobs to submit to the queue at once</td>
+		</tr>
+		<tr>
+			<td><code>chunk_size</code></td>
+			<td>usize</td>
+			<td>Number of jobs to combine into a single queue submission</td>
+		</tr>
+		<tr>
+			<td><code>coord_type</code></td>
+			<td>CoordType</td>
+			<td>Displacement type for the QFF. Supported values are sic, cart, and
+				norm</td>
+		</tr>
+		<tr>
+			<td><code>template</code></td>
+			<td>TemplateSrc</td>
+			<td>Quantum chemistry program template. Can either be a literal String
+				or a map with the key <code>file</code></td>
+		</tr>
+		<tr>
+			<td><code>hybrid_template</code></td>
+			<td> Option&lt;TemplateSrc&gt;</td>
+			<td>Separate quantum chemistry program template for cubic and quartic
+				force constants</td>
+		</tr>
+		<tr>
+			<td><code>queue_template</code></td>
+			<td> Option&lt;TemplateSrc&gt;</td>
+			<td>Queuing system template</td>
+		</tr>
+		<tr>
+			<td><code>program</code></td>
+			<td>Program</td>
+			<td>A quantum chemistry program name. Supported values are dftb+, mopac,
+				molpro, and cfour</td>
+		</tr>
+		<tr>
+			<td><code>queue</code></td>
+			<td> Queue</td>
+			<td>A queuing system. Supported values are pbs, slurm, and local</td>
+		</tr>
+		<tr>
+			<td><code>findiff</code></td>
+			<td> Option&lt;bool&gt;</td>
+			<td>Whether to use finite differences for derivative evaluations. Not
+				all coordinate types support this</td>
+		</tr>
+		<tr>
+			<td><code>check_int</code></td>
+			<td>usize</td>
+			<td>Interval in polling iterations to write checkpoints. A value of 0
+				disables checkpoints</td>
+		</tr>
+		<tr>
+			<td><code>weights</code></td>
+			<td> Option&lt;Vec&lt;f64&gt;&gt;</td>
+			<td>An optional sequence of atomic masses for use in normal coordinate
+				QFFs and spectroscopic calculations</td>
+		</tr>
+		<tr>
+			<td><code>dummy_atoms</code></td>
+			<td> Option&lt;usize&gt;</td>
+			<td>An optional number of trailing dummy atoms</td>
+		</tr>
+		<tr>
+			<td><code>norm_resume_hff</code></td>
+			<td>Option&lt;bool&gt;</td>
+			<td>Resume a normal coordinate QFF from a previously-finished HFF
+				checkpoint</td>
+		</tr>
 	</table>
 
-	<h3 id=geometry-specification-and-optimization><a href="#geometry-specification-and-optimization">Geometry Specification and Optimization</a></h3>
+	<h3 id=geometry-specification-and-optimization><a href="#geometry-specification-and-optimization">Geometry
+			Specification and Optimization</a></h3>
 
 	<p>
-	  The <code>geometry</code> can be specified as either an XYZ geometry with
-	  an optional number of atoms and comment line or as a Z-matrix. Currently,
-	  pbqff cannot automatically convert between Z-matrix and XYZ geometries,
-	  so <code>optimize = true</code> is required if the geometry is provided as
-	  a Z-matrix. This allows pbqff to extract the Cartesian geometry from the
-	  quantum chemistry program's output file and use that for the geometrical
-	  displacements. For completeness, here is an example XYZ geometry for
-	  cyclopropenylidene:
+		The <code>geometry</code> can be specified as either an XYZ geometry with
+		an optional number of atoms and comment line or as a Z-matrix. Currently,
+		pbqff cannot automatically convert between Z-matrix and XYZ geometries,
+		so <code>optimize = true</code> is required if the geometry is provided as
+		a Z-matrix. This allows pbqff to extract the Cartesian geometry from the
+		quantum chemistry program's output file and use that for the geometrical
+		displacements. For completeness, here is an example XYZ geometry for
+		cyclopropenylidene:
 	</p>
 
 	<pre><code>5
@@ -380,8 +383,8 @@ H          0.0000000000        1.5952720351        0.9069548903
 </code></pre>
 
 	<p>
-	  Again, the first two lines are optional, but if either one is present then
-	  both must be present. And an example Z-matrix geometry for water:
+		Again, the first two lines are optional, but if either one is present then
+		both must be present. And an example Z-matrix geometry for water:
 	</p>
 
 	<pre><code>O
@@ -393,71 +396,71 @@ HOH = 109.5
 </code></pre>
 
 	<p>
-	  Aside from the caveats above about Z-matrix input,
-	  the <code>optimize</code> keyword tells pbqff whether or not to optimize
-	  the geometry before building the rest of the QFF. Because the quality of
-	  the Taylor series approximation underlying the QFF is tied to the
-	  assumption that the input geometry is a minimum on the potential energy
-	  surface (PES), any geometries provided with <code>optimize = false</code>
-	  should definitely have been optimized prior to the pbqff run and at the
-	  same level of theory as the QFF.
+		Aside from the caveats above about Z-matrix input,
+		the <code>optimize</code> keyword tells pbqff whether or not to optimize
+		the geometry before building the rest of the QFF. Because the quality of
+		the Taylor series approximation underlying the QFF is tied to the
+		assumption that the input geometry is a minimum on the potential energy
+		surface (PES), any geometries provided with <code>optimize = false</code>
+		should definitely have been optimized prior to the pbqff run and at the
+		same level of theory as the QFF.
 	</p>
 
 	<h3 id=charge><a href="#charge">Charge</a></h3>
 
 	<p>
-	  <code>charge</code> is possibly the most straightforward input option as
-	  it is simply the molecular charge as a whole number. As we'll see in later
-	  sections, this won't necessarily be used if you omit
-	  a <code>{{.charge}}</code> entry in your program template, but the
-	  option must be provided in the pbqff input file even in those cases.
+		<code>charge</code> is possibly the most straightforward input option as
+		it is simply the molecular charge as a whole number. As we'll see in later
+		sections, this won't necessarily be used if you omit
+		a <code>{{.charge}}</code> entry in your program template, but the
+		option must be provided in the pbqff input file even in those cases.
 	</p>
 
 	<h3 id=step-size><a href="#step-size">Step Size</a></h3>
 
 	<p>
-	  <code>step_size</code> sets the displacement size for the QFF in units of
-	  Ångstroms. 0.005 is a reasonable default, with larger values like 0.010 or
-	  even 0.020 helping occasionally with floppy systems.
+		<code>step_size</code> sets the displacement size for the QFF in units of
+		Ångstroms. 0.005 is a reasonable default, with larger values like 0.010 or
+		even 0.020 helping occasionally with floppy systems.
 	</p>
 
 	<h3 id=sleep-interval><a href="#sleep-interval">Sleep Interval</a></h3>
 
 	<p>
-	  pbqff uses a polling model for running jobs in parallel. On each iteration
-	  of a big loop that runs until all jobs have finished, pbqff checks each
-	  output file for the currently-running jobs to see if any have finished.
-	  For very short single-point energy calculations (like PM6 or HF/STO-3G)
-	  this makes a lot of sense because many jobs are likely to finish
-	  constantly and each iteration will make some progress. On the other hand,
-	  for long-running individual jobs (like CCSD(T)-F12/cc-pCVTZ-F12 on a large
-	  molecule), pbqff will waste a lot of CPU time constantly checking the same
-	  output files that may not have changed meaningfully since the last polling
-	  interval. Thus, <code>sleep_int</code> is an interval in seconds for pbqff
-	  to sleep between such polling attempts. Higher values should cause pbqff
-	  to spend less CPU time reading the same files over and over, but extremely
-	  high values could potentially lead to periods of no jobs running because
-	  submitting more jobs as old ones finish is also part of the polling loop.
-	  In practice, I usually use a minimum of 60 seconds for this and go up to
-	  ~600 seconds for what I consider really long jobs. The options in the next
-	  section also have some effect on what to choose here.
+		pbqff uses a polling model for running jobs in parallel. On each iteration
+		of a big loop that runs until all jobs have finished, pbqff checks each
+		output file for the currently-running jobs to see if any have finished.
+		For very short single-point energy calculations (like PM6 or HF/STO-3G)
+		this makes a lot of sense because many jobs are likely to finish
+		constantly and each iteration will make some progress. On the other hand,
+		for long-running individual jobs (like CCSD(T)-F12/cc-pCVTZ-F12 on a large
+		molecule), pbqff will waste a lot of CPU time constantly checking the same
+		output files that may not have changed meaningfully since the last polling
+		interval. Thus, <code>sleep_int</code> is an interval in seconds for pbqff
+		to sleep between such polling attempts. Higher values should cause pbqff
+		to spend less CPU time reading the same files over and over, but extremely
+		high values could potentially lead to periods of no jobs running because
+		submitting more jobs as old ones finish is also part of the polling loop.
+		In practice, I usually use a minimum of 60 seconds for this and go up to
+		~600 seconds for what I consider really long jobs. The options in the next
+		section also have some effect on what to choose here.
 	</p>
 
 	<h3 id=job-limit-and-chunk-size><a href="#job-limit-and-chunk-size">Job Limit and Chunk Size</a></h3>
 
 	<p>
-	  These two options, <code>job_limit</code> and <code>chunk_size</code> are
-	  in the same section because they are very closely related. Early versions
-	  of pbqff submitted each single-point energy calculation as a separate
-	  queue submission limited by the <code>job_limit</code> setting. However,
-	  this was inefficient enough to attract the attention of the HPC
-	  administrators who recommended combining multiple program invocations into
-	  a single submission script. This led to the addition of
-	  the <code>chunk_size</code> option, which sets the number of invocations
-	  per submission script (chunk). Hopefully this is already clear, but below
-	  is an illustration of a chunk of MOPAC jobs for a local queue, where "job
-	  submission" is handled by a very simple bash script. This would correspond
-	  to a <code>chunk_size</code> of 5.
+		These two options, <code>job_limit</code> and <code>chunk_size</code> are
+		in the same section because they are very closely related. Early versions
+		of pbqff submitted each single-point energy calculation as a separate
+		queue submission limited by the <code>job_limit</code> setting. However,
+		this was inefficient enough to attract the attention of the HPC
+		administrators who recommended combining multiple program invocations into
+		a single submission script. This led to the addition of
+		the <code>chunk_size</code> option, which sets the number of invocations
+		per submission script (chunk). Hopefully this is already clear, but below
+		is an illustration of a chunk of MOPAC jobs for a local queue, where "job
+		submission" is handled by a very simple bash script. This would correspond
+		to a <code>chunk_size</code> of 5.
 	</p>
 
 	<pre><code>/opt/mopac/mopac job.0000000.mop
@@ -468,315 +471,317 @@ HOH = 109.5
 </code></pre>
 
 	<p>
-	  Because of this legacy, <code>job_limit</code> still corresponds to
-	  individual calculations, despite the fact that they are now grouped into
-	  chunks. As a result, if you want to restrict the number of jobs as
-	  reported by your queue manager you should consider the
-	  ratio <code>job_limit / chunk_size</code> rather
-	  than <code>job_limit</code> alone. For example, to target a maximum number
-	  of queued jobs of 500 with a chunk size of 25, you could set
-	  a <code>job_limit</code> of <code>500 * 25 = 12_500</code>. Note the use
-	  of the underscore as a digit separator. This is not required in TOML but
-	  can be handy for large numbers.
+		Because of this legacy, <code>job_limit</code> still corresponds to
+		individual calculations, despite the fact that they are now grouped into
+		chunks. As a result, if you want to restrict the number of jobs as
+		reported by your queue manager you should consider the
+		ratio <code>job_limit / chunk_size</code> rather
+		than <code>job_limit</code> alone. For example, to target a maximum number
+		of queued jobs of 500 with a chunk size of 25, you could set
+		a <code>job_limit</code> of <code>500 * 25 = 12_500</code>. Note the use
+		of the underscore as a digit separator. This is not required in TOML but
+		can be handy for large numbers.
 	</p>
 
 	<p>
-	  The main consideration when choosing a <code>chunk_size</code> is the
-	  amount of time spent submitting jobs versus actually running jobs.
-	  According to our system administrators, the cutoff (likely pretty
-	  conservative) is around 5 minutes of job time. This can lead to pretty
-	  crazy chunk sizes, especially for PM6 calculations on small molecules,
-	  where single-point energy computations can take on the order of 0.01
-	  seconds (<code>5 minutes = 300 seconds | 1 job / 0.01 seconds => 30_000
+		The main consideration when choosing a <code>chunk_size</code> is the
+		amount of time spent submitting jobs versus actually running jobs.
+		According to our system administrators, the cutoff (likely pretty
+		conservative) is around 5 minutes of job time. This can lead to pretty
+		crazy chunk sizes, especially for PM6 calculations on small molecules,
+		where single-point energy computations can take on the order of 0.01
+		seconds (<code>5 minutes = 300 seconds | 1 job / 0.01 seconds => 30_000
 	  jobs per chunk</code>!). However, more expensive calculations can easily
-	  take five minutes or more each, allowing you to use a chunk size of 1.
-	  Individual jobs give pbqff the greatest freedom to queue new jobs as old
-	  ones finish, but, again, it's possible to spend more time writing and
-	  submitting separate jobs (and taxing the queue system) than actually
-	  running calculations.
+		take five minutes or more each, allowing you to use a chunk size of 1.
+		Individual jobs give pbqff the greatest freedom to queue new jobs as old
+		ones finish, but, again, it's possible to spend more time writing and
+		submitting separate jobs (and taxing the queue system) than actually
+		running calculations.
 	</p>
 
 	<p>
-	  Of course, the preceding paragraphs all assume that you're running pbqff
-	  on a large molecule with many single-point calculations <i>and</i> that
-	  you're on some kind of distributed compute cluster. If, on the other hand,
-	  you're running pbqff on a personal computer or a single node on a cluster
-	  using the local queue option, you will only be able to run a very small
-	  number of chunks at once anyway (roughly one per CPU or thread you allowed
-	  pbqff to use). In this case, there's no real incentive to shrink
-	  your <code>chunk_size</code> to allow more flexible submission. As long as
-	  your chunk size is small enough to send one chunk to each core you
-	  requested, all of your compute will be saturated already. For example, you
-	  wouldn't want to request a chunk size of 250 for a 1000-job QFF and
-	  request 8 cores because only 4 cores would get chunks to work on, but
-	  there's no real reason to set a chunk size of 25 either. It will just lead
-	  to a lot more shell scripts being written. The logic is similar for a
-	  small molecule like a diatomic where the total number of points may be
-	  smaller than a reasonable chunk size for other calculations.
+		Of course, the preceding paragraphs all assume that you're running pbqff
+		on a large molecule with many single-point calculations <i>and</i> that
+		you're on some kind of distributed compute cluster. If, on the other hand,
+		you're running pbqff on a personal computer or a single node on a cluster
+		using the local queue option, you will only be able to run a very small
+		number of chunks at once anyway (roughly one per CPU or thread you allowed
+		pbqff to use). In this case, there's no real incentive to shrink
+		your <code>chunk_size</code> to allow more flexible submission. As long as
+		your chunk size is small enough to send one chunk to each core you
+		requested, all of your compute will be saturated already. For example, you
+		wouldn't want to request a chunk size of 250 for a 1000-job QFF and
+		request 8 cores because only 4 cores would get chunks to work on, but
+		there's no real reason to set a chunk size of 25 either. It will just lead
+		to a lot more shell scripts being written. The logic is similar for a
+		small molecule like a diatomic where the total number of points may be
+		smaller than a reasonable chunk size for other calculations.
 	</p>
 
 	<h4 id=rules-of-thumb><a href="#rules-of-thumb">Rules of Thumb</a></h4>
 
 	<p>
-	  This table contains my general heuristics for <code>job_limit</code>
-	  and <code>chunk_size</code> requests on our compute cluster, where the
-	  hard limit on queued jobs is around 1000, but most of the time I can only
-	  get ~50 jobs to run at once anyway.
+		This table contains my general heuristics for <code>job_limit</code>
+		and <code>chunk_size</code> requests on our compute cluster, where the
+		hard limit on queued jobs is around 1000, but most of the time I can only
+		get ~50 jobs to run at once anyway.
 	</p>
 
 	<table>
-	<tr>
-<th>Level of Theory</th>
-<th>Time Per Job (s)</th>
-<th>Job Limit</th>
-<th>Chunk Size</th>
-</tr>
-<tr>
-<td>PM6 (5 atoms)</td>
-<td>0.01</td>
-<td>1_500_000</td>
-<td>30_000</td>
-</tr>
-<tr>
-<td>F12-DZ (5 atoms)</td>
-<td> 1</td>
-<td> 15_000</td>
-<td> 300</td>
-</tr>
-<tr>
-<td>TZ-cCR (8 atoms)</td>
-<td> 300</td>
-<td> 50</td>
-<td> 1</td>
-</tr>
+		<tr>
+			<th>Level of Theory</th>
+			<th>Time Per Job (s)</th>
+			<th>Job Limit</th>
+			<th>Chunk Size</th>
+		</tr>
+		<tr>
+			<td>PM6 (5 atoms)</td>
+			<td>0.01</td>
+			<td>1_500_000</td>
+			<td>30_000</td>
+		</tr>
+		<tr>
+			<td>F12-DZ (5 atoms)</td>
+			<td> 1</td>
+			<td> 15_000</td>
+			<td> 300</td>
+		</tr>
+		<tr>
+			<td>TZ-cCR (8 atoms)</td>
+			<td> 300</td>
+			<td> 50</td>
+			<td> 1</td>
+		</tr>
 
 	</table>
 
 	<h3 id=coordinate-types><a href="#coordinate-types">Coordinate Types</a></h3>
 
 	<p>
-	  pbqff originally grew out of two separate projects: <code>go-cart</code>,
-	  which was my first implementation of finite-difference
-	  Cartesian-coordinate QFFs, and pbqff proper, which automated our group's
-	  traditional least-squares fitted symmetry-internal coordinate (SIC) QFFs.
-	  These two (SICs and Cartesian coordinates) are still supported, along with
-	  the newest but already most-used normal-coordinate QFFs. Fully documenting
-	  the construction of a symmetry-internal coordinate system is beyond the
-	  scope of this manual (at least for now but likely forever) because it
-	  involves a lot of practice and manual construction. Thus, the two
-	  recommended coordinate systems for pbqff are Cartesian coordinates,
-	  requested by <code>coord_type = "cart"</code> and normal coordinates,
-	  requested by <code>coord_type = "norm"</code>.
+		pbqff originally grew out of two separate projects: <code>go-cart</code>,
+		which was my first implementation of finite-difference
+		Cartesian-coordinate QFFs, and pbqff proper, which automated our group's
+		traditional least-squares fitted symmetry-internal coordinate (SIC) QFFs.
+		These two (SICs and Cartesian coordinates) are still supported, along with
+		the newest but already most-used normal-coordinate QFFs. Fully documenting
+		the construction of a symmetry-internal coordinate system is beyond the
+		scope of this manual (at least for now but likely forever) because it
+		involves a lot of practice and manual construction. Thus, the two
+		recommended coordinate systems for pbqff are Cartesian coordinates,
+		requested by <code>coord_type = "cart"</code> and normal coordinates,
+		requested by <code>coord_type = "norm"</code>.
 	</p>
 
 	<h4 id=cartesian-coordinates><a href="#cartesian-coordinates">Cartesian Coordinates</a></h4>
 
 	<p>
-	  Cartesian coordinates are the most straightforward coordinate system. The
-	  initial geometry is either already in Cartesian (XYZ) form or can be
-	  converted from a Z-matrix by the quantum chemistry program. Then, each of
-	  these coordinates is displaced in all of the two-, three-, and
-	  four-coordinate combinations needed to map out the QFF. It is
-	  theoretically possible to approximate the PES with a least-squares fit in
-	  Cartesian coordinates, but this is not currently implemented. I tried this
-	  in a previous version of pbqff, and it led to significant bottlenecks in
-	  the least-squares fit due to the much larger number of Cartesian points
-	  compared to SICs without any improvement (and occasional worsening) of the
-	  results. In other words, Cartesian coordinates imply <code>findiff =
+		Cartesian coordinates are the most straightforward coordinate system. The
+		initial geometry is either already in Cartesian (XYZ) form or can be
+		converted from a Z-matrix by the quantum chemistry program. Then, each of
+		these coordinates is displaced in all of the two-, three-, and
+		four-coordinate combinations needed to map out the QFF. It is
+		theoretically possible to approximate the PES with a least-squares fit in
+		Cartesian coordinates, but this is not currently implemented. I tried this
+		in a previous version of pbqff, and it led to significant bottlenecks in
+		the least-squares fit due to the much larger number of Cartesian points
+		compared to SICs without any improvement (and occasional worsening) of the
+		results. In other words, Cartesian coordinates imply <code>findiff =
 	  true</code>.
 	</p>
 
 	<h4 id=normal-coordinates><a href="#normal-coordinates">Normal Coordinates</a></h4>
 
 	<p>
-	  Normal coordinates are generally a clear improvement over Cartesian
-	  coordinates. First, the VPT2 implementation in spectro only requires the
-	  semi-diagonal normal coordinate force constants (Φ<sub>iijj</sub> and
-	  Φ<sub>iiii</sub>), but these require the fully-off-diagonal Cartesian
-	  coordinate force constants like F<sub>ijkl</sub> to compute. Similarly,
-	  and even more straightforwardly, normal coordinates discard the rotational
-	  and translational degrees of freedom present in Cartesian coordinates,
-	  lowering the number of coordinates from <code>3N</code> to <code>3N
+		Normal coordinates are generally a clear improvement over Cartesian
+		coordinates. First, the VPT2 implementation in spectro only requires the
+		semi-diagonal normal coordinate force constants (Φ<sub>iijj</sub> and
+		Φ<sub>iiii</sub>), but these require the fully-off-diagonal Cartesian
+		coordinate force constants like F<sub>ijkl</sub> to compute. Similarly,
+		and even more straightforwardly, normal coordinates discard the rotational
+		and translational degrees of freedom present in Cartesian coordinates,
+		lowering the number of coordinates from <code>3N</code> to <code>3N
 	  &minus; 6</code>. Combined, these factors allow for far fewer single-point
-	  energies to be evaluated in normal coordinates.
+		energies to be evaluated in normal coordinates.
 	</p>
 
 	<p>
-	  Further, normal coordinates share the convenience of Cartesian
-	  coordinates: they can be derived automatically from the input geometry.
-	  This may not be clear from this manual because of the limited treatment of
-	  SICs, but this is the primary contrast between SICs and normal coordinates
-	  because SICs also require far fewer points than Cartesians, putting them
-	  on more equal footing with normal coordinates in terms of computational
-	  cost (but still worse for even medium-sized molecules) but certainly not
-	  in convenience.
+		Further, normal coordinates share the convenience of Cartesian
+		coordinates: they can be derived automatically from the input geometry.
+		This may not be clear from this manual because of the limited treatment of
+		SICs, but this is the primary contrast between SICs and normal coordinates
+		because SICs also require far fewer points than Cartesians, putting them
+		on more equal footing with normal coordinates in terms of computational
+		cost (but still worse for even medium-sized molecules) but certainly not
+		in convenience.
 	</p>
 
 	<p>
-	  Of course, the similarity to Cartesian coordinates is no accident. Normal
-	  coordinates can only be derived automatically by computing a Cartesian
-	  harmonic force field (HFF) to obtain the Hessian matrix, from which the
-	  mass-weighted eigenvalues can be extracted to yield the normal
-	  coordinates. This separation of the HFF and QFF leads to two additional
-	  options for normal coordinate QFFs: <code>hybrid_template</code>
-	  and <code>norm_resume_hff</code>. These are both discussed more fully in
-	  later sections, but in brief, <code>hybrid_template</code> allows you to
-	  use the plain <code>template</code> as the template for the HFF points and
-	  the <code>hybrid_template</code> for the cubic and quartic points;
-	  and <code>norm_resume_hff</code> allows you to resume a normal coordinate
-	  QFF from a checkpoint after the initial HFF.
+		Of course, the similarity to Cartesian coordinates is no accident. Normal
+		coordinates can only be derived automatically by computing a Cartesian
+		harmonic force field (HFF) to obtain the Hessian matrix, from which the
+		mass-weighted eigenvalues can be extracted to yield the normal
+		coordinates. This separation of the HFF and QFF leads to two additional
+		options for normal coordinate QFFs: <code>hybrid_template</code>
+		and <code>norm_resume_hff</code>. These are both discussed more fully in
+		later sections, but in brief, <code>hybrid_template</code> allows you to
+		use the plain <code>template</code> as the template for the HFF points and
+		the <code>hybrid_template</code> for the cubic and quartic points;
+		and <code>norm_resume_hff</code> allows you to resume a normal coordinate
+		QFF from a checkpoint after the initial HFF.
 	</p>
 
 	<p>
-	  Normal coordinates are also the only coordinate type for which
-	  the <code>findiff</code> option actually has any effect. SICs are assumed
-	  to be fitted (<code>findiff = false</code>) and Cartesians are assumed to
-	  be finite-difference. However, because of the way normal coordinates are
-	  constructed (via the initial HFF), fitted normal coordinates are not refit
-	  to zero the approximated function gradient as was typical with SICs.
-	  Again, this is likely not to make much sense unless you're familiar with
-	  the SIC procedure itself, but in short, this means normal coordinates
-	  don't really capture the benefits SICs got from performing this fitting,
-	  and finite differences are more economical, so stick with finite
-	  differences (<code>findiff = true</code>) unless you really know what
-	  you're doing.
+		Normal coordinates are also the only coordinate type for which
+		the <code>findiff</code> option actually has any effect. SICs are assumed
+		to be fitted (<code>findiff = false</code>) and Cartesians are assumed to
+		be finite-difference. However, because of the way normal coordinates are
+		constructed (via the initial HFF), fitted normal coordinates are not refit
+		to zero the approximated function gradient as was typical with SICs.
+		Again, this is likely not to make much sense unless you're familiar with
+		the SIC procedure itself, but in short, this means normal coordinates
+		don't really capture the benefits SICs got from performing this fitting,
+		and finite differences are more economical, so stick with finite
+		differences (<code>findiff = true</code>) unless you really know what
+		you're doing.
 	</p>
 
 	<p>
-	  Finally, normal coordinates are not without their limitations. Their main
-	  shortcoming relates to the mass-weighting involved in their definition,
-	  which causes the atomic masses to be baked into the resulting force
-	  constants in a way that is not easy to reverse. Practically, this means
-	  that computing isotopic spectroscopic data with normal coordinate QFFs
-	  requires recomputing the QFF for each combination
-	  of <a href="#atomic-masses">atomic masses</a>. Second, because they are
-	  based on the Cartesian HFF, any numerical issues in the initial HFF can be
-	  dramatically compounded in the QFF. This mostly arises with highly
-	  symmetrical molecules (symmetric and spherical tops) with many resonances,
-	  but it can also pop up for other tricky molecules. It should be pretty
-	  obvious when this happens (anharmonic frequencies of 10,000 or more), but
-	  it's something to keep in the back of your mind.
+		Finally, normal coordinates are not without their limitations. Their main
+		shortcoming relates to the mass-weighting involved in their definition,
+		which causes the atomic masses to be baked into the resulting force
+		constants in a way that is not easy to reverse. Practically, this means
+		that computing isotopic spectroscopic data with normal coordinate QFFs
+		requires recomputing the QFF for each combination
+		of <a href="#atomic-masses">atomic masses</a>. Second, because they are
+		based on the Cartesian HFF, any numerical issues in the initial HFF can be
+		dramatically compounded in the QFF. This mostly arises with highly
+		symmetrical molecules (symmetric and spherical tops) with many resonances,
+		but it can also pop up for other tricky molecules. It should be pretty
+		obvious when this happens (anharmonic frequencies of 10,000 or more), but
+		it's something to keep in the back of your mind.
 	</p>
 
 	<h4 id=symmetry-internal-coordinates><a href="#symmetry-internal-coordinates">Symmetry-Internal Coordinates</a></h4>
 
 	<p>
-	  As mentioned above, fully documenting the SIC code could double the size
-	  of this document. All I'll say here is that running an SIC QFF in pbqff
-	  requires the top of an INTDER input file (the simple- and
-	  symmetry-internal coordinate definitions) in a file
-	  named <code>intder.in</code> in the directory where you invoke pbqff. If
-	  there's a resurgence of interest in SICs, I'd like to handle this kind of
-	  input in a more compact way and without requiring a separate file. Feel
-	  free to send me an email or open a GitHub issue if you are interested in
-	  this or try using it and encounter any problems.
+		As mentioned above, fully documenting the SIC code could double the size
+		of this document. All I'll say here is that running an SIC QFF in pbqff
+		requires the top of an INTDER input file (the simple- and
+		symmetry-internal coordinate definitions) in a file
+		named <code>intder.in</code> in the directory where you invoke pbqff. If
+		there's a resurgence of interest in SICs, I'd like to handle this kind of
+		input in a more compact way and without requiring a separate file. Feel
+		free to send me an email or open a GitHub issue if you are interested in
+		this or try using it and encounter any problems.
 	</p>
 
-	<h3 id=quantum-chemistry-program-types><a href="#quantum-chemistry-program-types">Quantum Chemistry Program Types</a></h3>
+	<h3 id=quantum-chemistry-program-types><a href="#quantum-chemistry-program-types">Quantum Chemistry Program
+			Types</a></h3>
 
 	<p>
-	  As mentioned in the introduction, pbqff offloads the interface to both
-	  chemistry programs and queuing systems to the psqs library. As listed in
-	  the psqs README, it currently supports writing input files and reading
-	  output files for the following programs:
+		As mentioned in the introduction, pbqff offloads the interface to both
+		chemistry programs and queuing systems to the psqs library. As listed in
+		the psqs README, it currently supports writing input files and reading
+		output files for the following programs:
 	</p>
 
 	<ul>
-	  <li>MOPAC</li>
-	  <li>Molpro</li>
-	  <li>CFOUR</li>
-	  <li>DFTB+</li>
+		<li>MOPAC</li>
+		<li>Molpro</li>
+		<li>CFOUR</li>
+		<li>DFTB+</li>
 	</ul>
 
 	<p>
-	  Where these are listed roughly in order of support quality. MOPAC and
-	  Molpro have been tested the most thoroughly, while CFOUR and DFTB+ have
-	  been tested but to a much more limited extent. Each of these can be
-	  requested in the pbqff input file using the <code>program</code> keyword
-	  with valid options being the <b>lowercase</b> versions of each program
-	  name as a TOML
-	  string: <code>"mopac"</code>, <code>"molpro"</code>, <code>"cfour"</code>, <code>"dftb+"</code>.
+		Where these are listed roughly in order of support quality. MOPAC and
+		Molpro have been tested the most thoroughly, while CFOUR and DFTB+ have
+		been tested but to a much more limited extent. Each of these can be
+		requested in the pbqff input file using the <code>program</code> keyword
+		with valid options being the <b>lowercase</b> versions of each program
+		name as a TOML
+		string: <code>"mopac"</code>, <code>"molpro"</code>, <code>"cfour"</code>, <code>"dftb+"</code>.
 	</p>
 
 	<h3 id=queue-types><a href="#queue-types">Queue Types</a></h3>
 
 	<p>
-	  Like the <code>program</code> option above, the <code>queue</code> option
-	  depends on the values supported by psqs, which are the following:
+		Like the <code>program</code> option above, the <code>queue</code> option
+		depends on the values supported by psqs, which are the following:
 	</p>
 
 	<ul>
-	  <li>PBS</li>
-	  <li>Slurm</li>
-	  <li>Local</li>
+		<li>PBS</li>
+		<li>Slurm</li>
+		<li>Local</li>
 	</ul>
 
 	<p>
-	  PBS and Slurm are popular queuing systems on HPC clusters, while the local
-	  queue is a way to run pbqff on a single computer. Again, these are listed
-	  roughly in order of support. Hundreds of QFFs have been run with pbqff on
-	  a PBS cluster, while a much smaller number have been run on a smaller
-	  Slurm cluster. The local queue is used in all of the pbqff unit tests, so
-	  by that metric it is arguably the best-tested, but it essentially has no
-	  error handling, making it suited really only for these tests and other
-	  short test calculations rather than "production" QFFs.
+		PBS and Slurm are popular queuing systems on HPC clusters, while the local
+		queue is a way to run pbqff on a single computer. Again, these are listed
+		roughly in order of support. Hundreds of QFFs have been run with pbqff on
+		a PBS cluster, while a much smaller number have been run on a smaller
+		Slurm cluster. The local queue is used in all of the pbqff unit tests, so
+		by that metric it is arguably the best-tested, but it essentially has no
+		error handling, making it suited really only for these tests and other
+		short test calculations rather than "production" QFFs.
 	</p>
 
 	<p>
-	  These can be selected by their lowercase TOML string forms with
-	  the <code>queue</code> keyword: <code>"pbs"</code>, <code>"slurm"</code>,
-	  and <code>"local"</code>.
+		These can be selected by their lowercase TOML string forms with
+		the <code>queue</code> keyword: <code>"pbs"</code>, <code>"slurm"</code>,
+		and <code>"local"</code>.
 
-	<h3 id=quantum-chemistry-program-templates><a href="#quantum-chemistry-program-templates">Quantum Chemistry Program Templates</a></h3>
+	<h3 id=quantum-chemistry-program-templates><a href="#quantum-chemistry-program-templates">Quantum Chemistry Program
+			Templates</a></h3>
 
-	  <!-- things to cover here include both keyword replacement and default
+	<!-- things to cover here include both keyword replacement and default
 	  optimization line additions -->
 
 	<p>
-	  The program <code>template</code> is the main way for you to customize how
-	  pbqff runs the single-point energies that compose the QFF. The template
-	  syntax is inspired by
-	  Go's <a href="https://pkg.go.dev/text/template">template</a> library,
-	  where patterns like <code>{{.geom}}</code> are replaced by the
-	  appropriate information (somewhat obviously the geometry in this example).
-	  Currently each supported program has its own set of supported options, but
-	  most of them are the same at least.
+		The program <code>template</code> is the main way for you to customize how
+		pbqff runs the single-point energies that compose the QFF. The template
+		syntax is inspired by
+		Go's <a href="https://pkg.go.dev/text/template">template</a> library,
+		where patterns like <code>{{.geom}}</code> are replaced by the
+		appropriate information (somewhat obviously the geometry in this example).
+		Currently each supported program has its own set of supported options, but
+		most of them are the same at least.
 	</p>
 
 	<p>
-	  Most users of pbqff specify both these <code>template</code> values and
-	  the <code>queue_template</code> discussed in the next section as a literal
-	  TOML string, but you can also specify an external file using the syntax
-	  below.
+		Most users of pbqff specify both these <code>template</code> values and
+		the <code>queue_template</code> discussed in the next section as a literal
+		TOML string, but you can also specify an external file using the syntax
+		below.
 	</p>
 
 	<pre><code>template = { file = "/path/to/template" }</code></pre>
 
 	<p>
-	  All of the examples in the following sections will work for either
-	  plain <code>template</code> input or for the
-	  special <code>hybrid_template</code> option. As mentioned in the section
-	  on <a href="#normal-coordinates">normal
-	  coordinates</a>, <code>hybrid_template</code> allows you to run the HFF
-	  portion of a normal coordinate QFF with one level of theory and the cubic
-	  and quartic portions of the QFF at a second level of theory. As far as I
-	  know, this has only been tested to work with <a href="#molpro">Molpro</a>,
-	  so see that section below for an example input file.
+		All of the examples in the following sections will work for either
+		plain <code>template</code> input or for the
+		special <code>hybrid_template</code> option. As mentioned in the section
+		on <a href="#normal-coordinates">normal
+			coordinates</a>, <code>hybrid_template</code> allows you to run the HFF
+		portion of a normal coordinate QFF with one level of theory and the cubic
+		and quartic portions of the QFF at a second level of theory. As far as I
+		know, this has only been tested to work with <a href="#molpro">Molpro</a>,
+		so see that section below for an example input file.
 	</p>
 
 	<h4 id=mopac><a href="#mopac">MOPAC</a></h4>
 
 	<p>
-	  MOPAC has the simplest <code>template</code> format because MOPAC uses a
-	  single line at the start of the file to specify all options, followed by
-	  two comment lines and the geometry. As such, pbqff does not handle any
-	  template parameter replacements for MOPAC (the curly brace stuff from the
-	  paragraphs above). Options like the charge and whether or not to run an
-	  optimization are simply appended to the first line of the template, and
-	  the geometry for each single-point energy calculation is appended to the
-	  file after two arbitrary comment lines. As such, the <code>template</code>
-	  value in a MOPAC QFF should be a single-line TOML string like those in the
-	  examples below.
+		MOPAC has the simplest <code>template</code> format because MOPAC uses a
+		single line at the start of the file to specify all options, followed by
+		two comment lines and the geometry. As such, pbqff does not handle any
+		template parameter replacements for MOPAC (the curly brace stuff from the
+		paragraphs above). Options like the charge and whether or not to run an
+		optimization are simply appended to the first line of the template, and
+		the geometry for each single-point energy calculation is appended to the
+		file after two arbitrary comment lines. As such, the <code>template</code>
+		value in a MOPAC QFF should be a single-line TOML string like those in the
+		examples below.
 	</p>
 
 	<pre><code>template = "scfcrt=1.D-21 aux(precision=14 comp xp xs xw) PM6 THREADS=1"</code></pre>
@@ -784,43 +789,43 @@ HOH = 109.5
 PM6 SINGLET THREADS=1 external=params.dat"""</code></pre>
 
 	<p>
-	  As shown in the second example, you can also use the multi-line TOML
-	  string syntax (triple quotes) to allow very long templates to be broken
-	  across multiple lines with a backslash. Unfortunately this is not
-	  supported by single-line TOML strings with single quotes.
+		As shown in the second example, you can also use the multi-line TOML
+		string syntax (triple quotes) to allow very long templates to be broken
+		across multiple lines with a backslash. Unfortunately this is not
+		supported by single-line TOML strings with single quotes.
 	</p>
 
 	<p>
-	  MOPAC defaults to running a geometry optimization, so the input
-	  option <code>1SCF</code> is added to the input line to disable this for
-	  the single-point energy computations. As far as I know it's safe to
-	  include any geometry-optimization-specific options
-	  (like <code>gnorm</code> above) in these single-point calculations, so
-	  pbqff doesn't have to do any further processing on the template.
+		MOPAC defaults to running a geometry optimization, so the input
+		option <code>1SCF</code> is added to the input line to disable this for
+		the single-point energy computations. As far as I know it's safe to
+		include any geometry-optimization-specific options
+		(like <code>gnorm</code> above) in these single-point calculations, so
+		pbqff doesn't have to do any further processing on the template.
 	</p>
 
 	<h4 id=molpro><a href="#molpro">Molpro</a></h4>
 
 	<p>
-	  For Molpro, pbqff supports two template
-	  parameters: <code>{{.geom}}</code> and <code>{{.charge}}</code>,
-	  although it's often easier to supply the charge literally in
-	  your <code>template</code>. The <code>charge</code> option is quite
-	  straightforward as the input <code>charge</code> option is simply
-	  substituted directly for <code>{{.charge}}</code> in the template
-	  string. The geometry handling, on the other hand, is slightly more
-	  complicated. Notice that there is no closing curly brace in the templates
-	  below. The reason for this is simply programming convenience, at a slight
-	  risk of confusion for the user. For Z-matrix geometries, Molpro expects
-	  the main Z-matrix to be inside the curly braces and the variable
-	  definitions to follow the closing curly brace. In contrast, XYZ geometries
-	  should be fully enclosed in curly braces. Omitting the closing curly brace
-	  makes it easier for pbqff to handle this distinction.
+		For Molpro, pbqff supports two template
+		parameters: <code>{{.geom}}</code> and <code>{{.charge}}</code>,
+		although it's often easier to supply the charge literally in
+		your <code>template</code>. The <code>charge</code> option is quite
+		straightforward as the input <code>charge</code> option is simply
+		substituted directly for <code>{{.charge}}</code> in the template
+		string. The geometry handling, on the other hand, is slightly more
+		complicated. Notice that there is no closing curly brace in the templates
+		below. The reason for this is simply programming convenience, at a slight
+		risk of confusion for the user. For Z-matrix geometries, Molpro expects
+		the main Z-matrix to be inside the curly braces and the variable
+		definitions to follow the closing curly brace. In contrast, XYZ geometries
+		should be fully enclosed in curly braces. Omitting the closing curly brace
+		makes it easier for pbqff to handle this distinction.
 	</p>
 
 	<p>
-	  Here's a somewhat complicated template example that captures the
-	  flexibility of the template input for a TZ-cCR calculation:
+		Here's a somewhat complicated template example that captures the
+		flexibility of the template input for a TZ-cCR calculation:
 	</p>
 
 	<pre><code>template = """memory,8,g
@@ -855,65 +860,65 @@ pbqff=etz(2)+edkr-edk
 show[1,f20.12],pbqff"""</code></pre>
 
 	<p>
-	  In addition to the note about the missing curly brace, also note that
-	  pbqff will only read the output energy if it is named <code>pbqff</code>
-	  and displayed in the output using the <code>show</code> directive. For
-	  simple calculations, this can be achieved using an expression
-	  like <code>pbqff=energy</code>, followed by thte <code>show</code> line in
-	  the example above. However, for F12 calculations in particular, it's
-	  important to remember that the F12 energy in Molpro is a vector, with the
-	  F12a and F12b energies in it. The example above uses the F12b energy
-	  (<code>etz(2)</code>). This might look unusual if you're a programmer used
-	  to indices starting at zero, but Fortran indices actually start at 1,
-	  meaning <code>etz(1)</code> is the F12a energy and <code>etz(2)</code> is
-	  the F12b energy.
+		In addition to the note about the missing curly brace, also note that
+		pbqff will only read the output energy if it is named <code>pbqff</code>
+		and displayed in the output using the <code>show</code> directive. For
+		simple calculations, this can be achieved using an expression
+		like <code>pbqff=energy</code>, followed by thte <code>show</code> line in
+		the example above. However, for F12 calculations in particular, it's
+		important to remember that the F12 energy in Molpro is a vector, with the
+		F12a and F12b energies in it. The example above uses the F12b energy
+		(<code>etz(2)</code>). This might look unusual if you're a programmer used
+		to indices starting at zero, but Fortran indices actually start at 1,
+		meaning <code>etz(1)</code> is the F12a energy and <code>etz(2)</code> is
+		the F12b energy.
 	</p>
 
 	<p>
-	  Another important feature of Molpro template handling is how it adds or
-	  subtracts geometry optimization keywords depending on the type of
-	  calculation requested. There are four possibilities here:
+		Another important feature of Molpro template handling is how it adds or
+		subtracts geometry optimization keywords depending on the type of
+		calculation requested. There are four possibilities here:
 	</p>
 
 	<ul>
-	  <li>Optimization requested and <code>optg</code> included in template</li>
-	  <li>Optimization requested and no <code>optg</code> included</li>
-	  <li>No optimization requested and <code>optg</code> included</li>
-	  <li>No optimization requested and no <code>optg</code> included</li>
+		<li>Optimization requested and <code>optg</code> included in template</li>
+		<li>Optimization requested and no <code>optg</code> included</li>
+		<li>No optimization requested and <code>optg</code> included</li>
+		<li>No optimization requested and no <code>optg</code> included</li>
 	</ul>
 
 	<p>
-	  In the first and last cases, pbqff doesn't have to make any changes to
-	  your template. However, in the second and third cases, pbqff needs to
-	  bring the request for an initial geometry optimization into alignment with
-	  the provided template. It does this by either adding a
-	  default <code>optg</code> directive
-	  (<code>{optg,grms=1.d-8,srms=1.d-8}</code>) in the second case, or by
-	  deleting a line matching the regular
-	  expression <code>(?i)^.*optg(,|\s*$)</code>. If you're not familiar with
-	  the intricacies of regular expressions, this looks for a line starting
-	  with some optional junk (such as a curly brace), followed by the literal
-	  word <code>optg</code>, followed by either a comma or some number of
-	  spaces and a newline. While writing this, it doesn't seem quite right, but
-	  it has worked for a couple of years in practice to identify
-	  typical <code>optg</code> lines
-	  like <code>{optg,grms=1.d-8,srms=1.d-8}</code> and skip lines
-	  like <code>gthresh,optgrad=1.d-8,optstep=1.d-8;</code>, which also
-	  includes <code>optg</code> but not in the right way.
+		In the first and last cases, pbqff doesn't have to make any changes to
+		your template. However, in the second and third cases, pbqff needs to
+		bring the request for an initial geometry optimization into alignment with
+		the provided template. It does this by either adding a
+		default <code>optg</code> directive
+		(<code>{optg,grms=1.d-8,srms=1.d-8}</code>) in the second case, or by
+		deleting a line matching the regular
+		expression <code>(?i)^.*optg(,|\s*$)</code>. If you're not familiar with
+		the intricacies of regular expressions, this looks for a line starting
+		with some optional junk (such as a curly brace), followed by the literal
+		word <code>optg</code>, followed by either a comma or some number of
+		spaces and a newline. While writing this, it doesn't seem quite right, but
+		it has worked for a couple of years in practice to identify
+		typical <code>optg</code> lines
+		like <code>{optg,grms=1.d-8,srms=1.d-8}</code> and skip lines
+		like <code>gthresh,optgrad=1.d-8,optstep=1.d-8;</code>, which also
+		includes <code>optg</code> but not in the right way.
 	</p>
 
 	<p>
-	  In summary, if you're picky about how the optimization should be run, be
-	  sure to include a single-line <code>optg</code> directive of your own
-	  choosing, and pbqff will remove it as needed for single-point energy
-	  calculations. Otherwise you can omit an <code>optg</code> line entirely
-	  and pbqff will include a default one as needed too.
+		In summary, if you're picky about how the optimization should be run, be
+		sure to include a single-line <code>optg</code> directive of your own
+		choosing, and pbqff will remove it as needed for single-point energy
+		calculations. Otherwise you can omit an <code>optg</code> line entirely
+		and pbqff will include a default one as needed too.
 	</p>
 
 	<p>
-	  As one final example, here's a combination <code>template</code>
-	  and <code>hybrid_template</code> input file section for a TZ-cCR+DZ
-	  calculation:
+		As one final example, here's a combination <code>template</code>
+		and <code>hybrid_template</code> input file section for a TZ-cCR+DZ
+		calculation:
 	</p>
 
 	<pre><code>template = """memory,1,g
@@ -968,22 +973,22 @@ show[1,f20.12],pbqff
 """</code></pre>
 
 	<p>
-	  If renamed just to <code>template</code>, the <code>hybrid_template</code>
-	  would serve as an F12-DZ template itself.
+		If renamed just to <code>template</code>, the <code>hybrid_template</code>
+		would serve as an F12-DZ template itself.
 	</p>
 
 	<h4 id=cfour><a href="#cfour">CFOUR</a></h4>
 
 	<p>
-	  Like with Molpro, pbqff also supports the <code>{{.geom}}</code>
-	  and <code>{{.charge}}</code> keywords for CFOUR. Additionally, pbqff
-	  recognizes a <code>{{.keywords}}</code> template parameter that it
-	  needs to know where to insert things like <code>COORD=CARTESIAN</code> for
-	  the single-point energy calculations. One, admittedly strange, difference
-	  with the CFOUR <code>{{.charge}}</code> parameter is that it also adds
-	  the prefix <code>CHARGE=</code> as expected by CFOUR. With these
-	  considerations in mind, an example CFOUR template for a CCSD/cc-pVTZ QFF
-	  is shown below.
+		Like with Molpro, pbqff also supports the <code>{{.geom}}</code>
+		and <code>{{.charge}}</code> keywords for CFOUR. Additionally, pbqff
+		recognizes a <code>{{.keywords}}</code> template parameter that it
+		needs to know where to insert things like <code>COORD=CARTESIAN</code> for
+		the single-point energy calculations. One, admittedly strange, difference
+		with the CFOUR <code>{{.charge}}</code> parameter is that it also adds
+		the prefix <code>CHARGE=</code> as expected by CFOUR. With these
+		considerations in mind, an example CFOUR template for a CCSD/cc-pVTZ QFF
+		is shown below.
 	</p>
 
 	<pre><code>comment line
@@ -994,23 +999,23 @@ show[1,f20.12],pbqff
 {{.keywords}})</code></pre>
 
 	<p>
-	  Unlike Molpro, there is no special handling of geometry optimization. If
-	  you request a geometry optimization, pbqff assumes that you have marked
-	  all of the variables in the Z-matrix to optimize with <code>*</code> as
-	  expected by CFOUR and will extract the optimized Cartesian geometry from
-	  the MOLDEN output file in the same directory as the main CFOUR output.
+		Unlike Molpro, there is no special handling of geometry optimization. If
+		you request a geometry optimization, pbqff assumes that you have marked
+		all of the variables in the Z-matrix to optimize with <code>*</code> as
+		expected by CFOUR and will extract the optimized Cartesian geometry from
+		the MOLDEN output file in the same directory as the main CFOUR output.
 	</p>
 
 	<h4 id=dftb+><a href="#dftb+">DFTB+</a></h4>
 
 	<p>
-	  Again, like Molpro and CFOUR, DFTB+ supports
-	  the <code>{{.geom}}</code> and <code>{{.charge}}</code> template
-	  parameters. Also like Molpro, DFTB+ requires a rather elaborate geometry
-	  optimization input section, so if you don't provide a section matching the
-	  regular expression <code>(?i)Driver = GeometryOptimization</code>
-	  (basically just that literal text but ignoring case), pbqff will add the
-	  default value shown below.
+		Again, like Molpro and CFOUR, DFTB+ supports
+		the <code>{{.geom}}</code> and <code>{{.charge}}</code> template
+		parameters. Also like Molpro, DFTB+ requires a rather elaborate geometry
+		optimization input section, so if you don't provide a section matching the
+		regular expression <code>(?i)Driver = GeometryOptimization</code>
+		(basically just that literal text but ignoring case), pbqff will add the
+		default value shown below.
 	</p>
 
 	<pre><code>Driver = GeometryOptimization {
@@ -1029,8 +1034,8 @@ show[1,f20.12],pbqff
 </code></pre>
 
 	<p>
-	  And here is a full DFTB+ example template with a custom geometry
-	  optimization block that is probably a more sensible default.
+		And here is a full DFTB+ example template with a custom geometry
+		optimization block that is probably a more sensible default.
 	</p>
 
 	<pre><code>template = """Geometry = xyzFormat {
@@ -1082,105 +1087,105 @@ Driver = GeometryOptimization {
 	<h3 id=queue-templates><a href="#queue-templates">Queue Templates</a></h3>
 
 	<p>
-	  Just like the plain <code>template</code> keyword allows you to customize
-	  the chemistry program input, the <code>queue_template</code> keyword
-	  allows you to tell pbqff how to submit your jobs to the three kinds of
-	  queues it knows about: PBS, Slurm, and what it calls a "local" queue.
+		Just like the plain <code>template</code> keyword allows you to customize
+		the chemistry program input, the <code>queue_template</code> keyword
+		allows you to tell pbqff how to submit your jobs to the three kinds of
+		queues it knows about: PBS, Slurm, and what it calls a "local" queue.
 	</p>
 
 	<p>
-	  One thing to keep in mind with the queue templates is how the chemistry
-	  program is invoked for each input job. The primary means of customizing
-	  this is through the <code>PROGRAM_CMD</code> variables. The table below
-	  shows the command that pbqff writes to a submission script for each job in
-	  a chunk. Don't worry about <code>{filename}</code> here, that's a Rust
-	  format string parameter, not a template parameter like we saw in the
-	  previous sections. pbqff will automatically replace this with the proper
-	  filename.
+		One thing to keep in mind with the queue templates is how the chemistry
+		program is invoked for each input job. The primary means of customizing
+		this is through the <code>PROGRAM_CMD</code> variables. The table below
+		shows the command that pbqff writes to a submission script for each job in
+		a chunk. Don't worry about <code>{filename}</code> here, that's a Rust
+		format string parameter, not a template parameter like we saw in the
+		previous sections. pbqff will automatically replace this with the proper
+		filename.
 	</p>
 
-<!-- , followed by the default value for each program's <code>CMD</code> -->
+	<!-- , followed by the default value for each program's <code>CMD</code> -->
 
 	<table>
-	  <tr>
-<th>Program</th>
-<th>Template</th>
-</tr>
-<tr>
-<td>MOPAC</td>
-<td><code>$MOPAC_CMD {filename}.mop</code></td>
-</tr>
-<tr>
-<td>Molpro</td>
-<td><code>$MOLPRO_CMD {filename}.inp</code></td>
-</tr>
-<tr>
-<td>CFOUR</td>
-<td><code>(cd {filename} && $CFOUR_CMD)</code></td>
-</tr>
-<tr>
-<td>DFTB+</td>
-<td><code>(cd {filename} && $DFTB_CMD > out)</code></td>
-</tr>
+		<tr>
+			<th>Program</th>
+			<th>Template</th>
+		</tr>
+		<tr>
+			<td>MOPAC</td>
+			<td><code>$MOPAC_CMD {filename}.mop</code></td>
+		</tr>
+		<tr>
+			<td>Molpro</td>
+			<td><code>$MOLPRO_CMD {filename}.inp</code></td>
+		</tr>
+		<tr>
+			<td>CFOUR</td>
+			<td><code>(cd {filename} && $CFOUR_CMD)</code></td>
+		</tr>
+		<tr>
+			<td>DFTB+</td>
+			<td><code>(cd {filename} && $DFTB_CMD > out)</code></td>
+		</tr>
 
 	</table>
 
 	<p>
-	  Note that CFOUR and DFTB+ expect a single filename for each input file
-	  (ZMAT and dftb_in.hsd, respectively), so their "filenames" actually
-	  correspond to directories. Again, that is effectively an implementation
-	  detail of pbqff, not something you should have to worry about.
+		Note that CFOUR and DFTB+ expect a single filename for each input file
+		(ZMAT and dftb_in.hsd, respectively), so their "filenames" actually
+		correspond to directories. Again, that is effectively an implementation
+		detail of pbqff, not something you should have to worry about.
 	</p>
 
 	<p>
-	  In addition to using these command variables, all of the queue
-	  implementations have access to the template
-	  parameters <code>{{.basename}}</code>
-	  and <code>{{.filename}}</code>. These both refer to the filename of
-	  the submission script itself (usually something
-	  like <code>main0.pbs</code>
-	  or <code>main0.slurm</code>). <code>basename</code> just strips off any
-	  directory information, which makes it a bit neater to use as the job name,
-	  as shown in the examples below.
+		In addition to using these command variables, all of the queue
+		implementations have access to the template
+		parameters <code>{{.basename}}</code>
+		and <code>{{.filename}}</code>. These both refer to the filename of
+		the submission script itself (usually something
+		like <code>main0.pbs</code>
+		or <code>main0.slurm</code>). <code>basename</code> just strips off any
+		directory information, which makes it a bit neater to use as the job name,
+		as shown in the examples below.
 	</p>
 
 	<p>
-	  The structure of each section below is the same. First, tables containing
-	  the default <code>CMD</code> values for each of the supported programs on
-	  that queue are shown, followed by example <code>queue_template</code>
-	  values for each program.
+		The structure of each section below is the same. First, tables containing
+		the default <code>CMD</code> values for each of the supported programs on
+		that queue are shown, followed by example <code>queue_template</code>
+		values for each program.
 	</p>
 
 	<h4 id=pbs><a href="#pbs">PBS</a></h4>
 
 	<table>
-	  <tr>
-<th>Program</th>
-<th>Default Command</th>
-</tr>
-<tr>
-<td>MOPAC</td>
-<td><code>/ddnlus/r2518/Packages/mopac/build/mopac</code></td>
-</tr>
-<tr>
-<td>Molpro</td>
-<td><code>"molpro -t $NCPUS --no-xml-output"</code></td>
-</tr>
-<tr>
-<td>CFOUR</td>
-<td><code>"/ddnlus/r2518/bin/c4ext_new.sh $NCPUS"</code></td>
-</tr>
-<tr>
-<td>DFTB+</td>
-<td><code>/ddnlus/r2518/.conda/envs/dftb/bin/dftb+</code></td>
-</tr>
+		<tr>
+			<th>Program</th>
+			<th>Default Command</th>
+		</tr>
+		<tr>
+			<td>MOPAC</td>
+			<td><code>/ddnlus/r2518/Packages/mopac/build/mopac</code></td>
+		</tr>
+		<tr>
+			<td>Molpro</td>
+			<td><code>"molpro -t $NCPUS --no-xml-output"</code></td>
+		</tr>
+		<tr>
+			<td>CFOUR</td>
+			<td><code>"/ddnlus/r2518/bin/c4ext_new.sh $NCPUS"</code></td>
+		</tr>
+		<tr>
+			<td>DFTB+</td>
+			<td><code>/ddnlus/r2518/.conda/envs/dftb/bin/dftb+</code></td>
+		</tr>
 
 	</table>
 
 	<p>
-	  MOPAC and DFTB+ have simple commands (just paths to executables here that
-	  don't require quotes, but Molpro and CFOUR require additional arguments
-	  separated by spaces.
+		MOPAC and DFTB+ have simple commands (just paths to executables here that
+		don't require quotes, but Molpro and CFOUR require additional arguments
+		separated by spaces.
 	</p>
 
 	<!-- These spaces are a disgusting hack to keep separate anchors for each
@@ -1189,17 +1194,17 @@ Driver = GeometryOptimization {
 	<h5 id=mopac-><a href="#mopac-">MOPAC </a></h5>
 
 	<p>
-	  This example is repeated from the initial input file example. One feature
-	  to point out here that will be shared with later templates is the use of
-	  the <code>trap</code> shell command to run any commands that need to be
-	  run after the single-point energy calculations. pbqff just appends
-	  each <code>CMD</code> line to the template, so there's not any opportunity
-	  to append commands after that. <code>trap</code> allows you to associate
-	  an action with a signal received by the shell process, in this case the
-	  EXIT signal sent when the process exits. If you need to run multiple
-	  commands you can either separate them with colons or <code>&&</code>, or
-	  define a simple shell <code>cleanup</code> function and invoke it like
-	  this: <code>trap cleanup EXIT</code>.
+		This example is repeated from the initial input file example. One feature
+		to point out here that will be shared with later templates is the use of
+		the <code>trap</code> shell command to run any commands that need to be
+		run after the single-point energy calculations. pbqff just appends
+		each <code>CMD</code> line to the template, so there's not any opportunity
+		to append commands after that. <code>trap</code> allows you to associate
+		an action with a signal received by the shell process, in this case the
+		EXIT signal sent when the process exits. If you need to run multiple
+		commands you can either separate them with colons or <code>&&</code>, or
+		define a simple shell <code>cleanup</code> function and invoke it like
+		this: <code>trap cleanup EXIT</code>.
 	</p>
 
 	<pre><code>queue_template = """
@@ -1229,10 +1234,10 @@ export MOPAC_CMD=/ddnlus/r2518/Packages/mopac/build/mopac
 </code></pre>
 
 	<p>
-	  Note the addition of the <code>LD_LIBRARY_PATH</code> variable along
-	  with <code>MOPAC_CMD</code>. This is not a pbqff requirement but something
-	  to keep in mind if your command points to a dynamically-linked executable
-	  like this version of MOPAC.
+		Note the addition of the <code>LD_LIBRARY_PATH</code> variable along
+		with <code>MOPAC_CMD</code>. This is not a pbqff requirement but something
+		to keep in mind if your command points to a dynamically-linked executable
+		like this version of MOPAC.
 	</p>
 
 	<h5 id=molpro-><a href="#molpro-">Molpro </a></h5>
@@ -1260,22 +1265,22 @@ export MOLPRO_CMD=\"molpro -t $NCPUS --no-xml-output\"
 """</code></pre>
 
 	<p>
-	  One potentially surprising part of this template is the use
-	  of <code>basename</code> instead of <code>filename</code> in
-	  the <code>#PBS -o</code> line. While Molpro PBS jobs get written into a
-	  single directory, unlike CFOUR and DFTB+ jobs, the Molpro module on Maple
-	  doesn't allow Molpro jobs to be submitted from a separate directory
-	  anymore. As a result, pbqff will change to the appropriate directory
-	  before submitting a job, leading to this template discrepancy.
+		One potentially surprising part of this template is the use
+		of <code>basename</code> instead of <code>filename</code> in
+		the <code>#PBS -o</code> line. While Molpro PBS jobs get written into a
+		single directory, unlike CFOUR and DFTB+ jobs, the Molpro module on Maple
+		doesn't allow Molpro jobs to be submitted from a separate directory
+		anymore. As a result, pbqff will change to the appropriate directory
+		before submitting a job, leading to this template discrepancy.
 	<p>
 
 	<h5 id=cfour-><a href="#cfour-">CFOUR </a></h5>
 	<p>
-	  This template and the following are pretty much the same, as were the
-	  previous two, so there's not much more to say. In general, the top portion
-	  of each template just consists of normal PBS directives with optional
-	  template parameters, followed by a single command or couple of commands
-	  (for MOPAC) to set the variable used by pbqff.
+		This template and the following are pretty much the same, as were the
+		previous two, so there's not much more to say. In general, the top portion
+		of each template just consists of normal PBS directives with optional
+		template parameters, followed by a single command or couple of commands
+		(for MOPAC) to set the variable used by pbqff.
 	</p>
 
 	<pre><code>queue_template = """
@@ -1322,19 +1327,19 @@ export DFTB_CMD=/ddnlus/r2518/.conda/envs/dftb/bin/dftb+
 	<h4 id=slurm><a href="#slurm">Slurm</a></h4>
 
 	<p>
-	  The general approach for Slurm and the local queue is identical to PBS, so
-	  you may want to read the previous section even if you're intending to use
-	  one of these other queues. Here I will just present some example templates
-	  for quick reference.
+		The general approach for Slurm and the local queue is identical to PBS, so
+		you may want to read the previous section even if you're intending to use
+		one of these other queues. Here I will just present some example templates
+		for quick reference.
 	</p>
 
-	<h5 id=mopac--><a href="#mopac--">MOPAC  </a></h5>
+	<h5 id=mopac--><a href="#mopac--">MOPAC </a></h5>
 
 	<p>
-	  This template and the Molpro one below are embedded directly from psqs,
-	  where the templates for pbqff are defined. psqs doesn't currently define
-	  default templates for CFOUR or DFTB+, so you'll have to provide
-	  a <code>queue_template</code> of your own for those programs.
+		This template and the Molpro one below are embedded directly from psqs,
+		where the templates for pbqff are defined. psqs doesn't currently define
+		default templates for CFOUR or DFTB+, so you'll have to provide
+		a <code>queue_template</code> of your own for those programs.
 	</p>
 
 	<pre><code>#!/bin/bash
@@ -1350,7 +1355,7 @@ echo $SLURM_JOB_ID
 date
 hostname
 </code></pre>
-	<h5 id=molpro--><a href="#molpro--">Molpro  </a></h5>
+	<h5 id=molpro--><a href="#molpro--">Molpro </a></h5>
 	<pre><code>#!/bin/bash
 #SBATCH --job-name={{.filename}}
 #SBATCH --ntasks=1
@@ -1361,7 +1366,7 @@ hostname
 
 MOLPRO_CMD="/home/qc/bin/molpro2020.sh 1 1"
 </code></pre>
-	<h5 id=cfour--><a href="#cfour--">CFOUR  </a></h5>
+	<h5 id=cfour--><a href="#cfour--">CFOUR </a></h5>
 	<pre><code>#!/bin/bash
 #SBATCH --job-name={{.filename}}
 #SBATCH --ntasks=1
@@ -1372,7 +1377,7 @@ MOLPRO_CMD="/home/qc/bin/molpro2020.sh 1 1"
 
 CFOUR_CMD="cfour"
 </code></pre>
-	<h5 id=dftb+--><a href="#dftb+--">DFTB+  </a></h5>
+	<h5 id=dftb+--><a href="#dftb+--">DFTB+ </a></h5>
 	<pre><code>#!/bin/bash
 #SBATCH --job-name={{.filename}}
 #SBATCH --ntasks=1
@@ -1386,118 +1391,118 @@ DFTB_CMD="dftb+"
 	<h4 id=local><a href="#local">Local</a></h4>
 
 	<p>
-	  Like for Slurm, pbqff includes only two default templates for the local
-	  queue option, which is primarily used for testing. Because the local queue
-	  simply "submits" jobs using bash scripts rather than PBS or Slurm
-	  submission scripts, a local queue template can be much simpler than a PBS
-	  or Slurm template, essentially just defining the path to the executable to
-	  be run. Of course, you can add any additional commands you want, but this
-	  is all that pbqff requires.
+		Like for Slurm, pbqff includes only two default templates for the local
+		queue option, which is primarily used for testing. Because the local queue
+		simply "submits" jobs using bash scripts rather than PBS or Slurm
+		submission scripts, a local queue template can be much simpler than a PBS
+		or Slurm template, essentially just defining the path to the executable to
+		be run. Of course, you can add any additional commands you want, but this
+		is all that pbqff requires.
 	</p>
 
-	<h5 id=mopac---><a href="#mopac---">MOPAC   </a></h5>
+	<h5 id=mopac---><a href="#mopac---">MOPAC </a></h5>
 	<pre><code>export MOPAC_CMD=/opt/mopac/mopac
 export LD_LIBRARY_PATH=/opt/mopac/ </code></pre>
 
-	<h5 id=dftb+---><a href="#dftb+---">DFTB+   </a></h5>
+	<h5 id=dftb+---><a href="#dftb+---">DFTB+ </a></h5>
 	<pre><code>DFTB_CMD=/opt/dftb+/dftb+ </code></pre>
 
-	<h5 id=molpro---><a href="#molpro---">Molpro   </a></h5>
+	<h5 id=molpro---><a href="#molpro---">Molpro </a></h5>
 	<pre><code>MOLPRO_CMD=molpro </code></pre>
 
-	<h5 id=cfour---><a href="#cfour---">CFOUR   </a></h5>
+	<h5 id=cfour---><a href="#cfour---">CFOUR </a></h5>
 	<pre><code>CFOUR_CMD=cfour </code></pre>
 
 	<h3 id=derivative-types><a href="#derivative-types">Derivative Types</a></h3>
 
 	<p>
-	  As alluded to in the coordinate type discussion, pbqff supports two types
-	  of derivative calculations for the force constants used in the VPT2
-	  calculations. The first, and more traditional, of these involves a
-	  least-squares fit of the QFF energies to the Taylor series expansion of
-	  the potential energy surface using
-	  the <a href="https://github.com/ntBre/anpass">ANPASS</a> program. This
-	  works well for small molecules and can help to smooth over minor numerical
-	  issues because the initial guess at the PES can be refit to the function
-	  minimum to yield zero-gradient force constants. On the other hand, for
-	  large molecules, assembling the matrix of energies and performing the
-	  least-squares solution actually becomes a fairly significant bottleneck in
-	  terms of both time and memory requirements. This is compounded by larger
-	  coordinate systems like Cartesians.
+		As alluded to in the coordinate type discussion, pbqff supports two types
+		of derivative calculations for the force constants used in the VPT2
+		calculations. The first, and more traditional, of these involves a
+		least-squares fit of the QFF energies to the Taylor series expansion of
+		the potential energy surface using
+		the <a href="https://github.com/ntBre/anpass">ANPASS</a> program. This
+		works well for small molecules and can help to smooth over minor numerical
+		issues because the initial guess at the PES can be refit to the function
+		minimum to yield zero-gradient force constants. On the other hand, for
+		large molecules, assembling the matrix of energies and performing the
+		least-squares solution actually becomes a fairly significant bottleneck in
+		terms of both time and memory requirements. This is compounded by larger
+		coordinate systems like Cartesians.
 	</p>
 
 	<p>
-	  As such, most of our recent calculations have relied instead
-	  on <a href="https://en.wikipedia.org/wiki/Finite_difference">finite
-	  difference derivatives</a>, specifically central finite differences. These
-	  are easier to compute because the individual energies comprising each
-	  force constant can be accumulated directly into their corresponding force
-	  constant rather than being kept around for a big calculation at the end.
+		As such, most of our recent calculations have relied instead
+		on <a href="https://en.wikipedia.org/wiki/Finite_difference">finite
+			difference derivatives</a>, specifically central finite differences. These
+		are easier to compute because the individual energies comprising each
+		force constant can be accumulated directly into their corresponding force
+		constant rather than being kept around for a big calculation at the end.
 	</p>
 
 	<p>
-	  Again, as described in the <a href="#normal-coordinates">normal
-	  coordinate</a> section, normal coordinates are the only type for which
-	  the <code>findiff</code> option is used. Cartesian coordinates
-	  assume <code>findiff = true</code> (they always use finite differences),
-	  and SICs assume <code>findiff = false</code> (they always use an ANPASS
-	  fitting). Normal coordinates also default to <code>findiff = false</code>,
-	  but because of the benefits mentioned above, you will usually want to use
-	  them with <code>findiff = true</code>, so this default should probably be
-	  updated.
+		Again, as described in the <a href="#normal-coordinates">normal
+			coordinate</a> section, normal coordinates are the only type for which
+		the <code>findiff</code> option is used. Cartesian coordinates
+		assume <code>findiff = true</code> (they always use finite differences),
+		and SICs assume <code>findiff = false</code> (they always use an ANPASS
+		fitting). Normal coordinates also default to <code>findiff = false</code>,
+		but because of the benefits mentioned above, you will usually want to use
+		them with <code>findiff = true</code>, so this default should probably be
+		updated.
 	</p>
 
 	<h3 id=checkpoints><a href="#checkpoints">Checkpoints</a></h3>
 
 	<p>
-	  Checkpoints are configured through the <code>check_int</code> option. As
-	  the name somewhat implies, this sets the checkpoint interval in units of
-	  polling iterations (see <a href="#sleep-interval">Sleep Interval</a> for
-	  more details). A value of <code>0</code> disables checkpoints, while a
-	  positive value will write a psqs checkpoint file (<code>chk.json</code>)
-	  at that interval.
+		Checkpoints are configured through the <code>check_int</code> option. As
+		the name somewhat implies, this sets the checkpoint interval in units of
+		polling iterations (see <a href="#sleep-interval">Sleep Interval</a> for
+		more details). A value of <code>0</code> disables checkpoints, while a
+		positive value will write a psqs checkpoint file (<code>chk.json</code>)
+		at that interval.
 	</p>
 
 	<p>
-	  In addition to the <code>chk.json</code> file written by psqs, which
-	  contains all of the information needed to recreate the queue of running
-	  chemistry jobs, pbqff writes its own checkpoint to
-	  the <code>res.chk</code> file. This file contains the rest of the state
-	  needed to pick up after psqs resumes from its own checkpoint. Despite the
-	  strange file extension, this is also a JSON file that you can inspect if
-	  needed, although modifying either of these files could cause some very
-	  strange issues unless you are very careful.
+		In addition to the <code>chk.json</code> file written by psqs, which
+		contains all of the information needed to recreate the queue of running
+		chemistry jobs, pbqff writes its own checkpoint to
+		the <code>res.chk</code> file. This file contains the rest of the state
+		needed to pick up after psqs resumes from its own checkpoint. Despite the
+		strange file extension, this is also a JSON file that you can inspect if
+		needed, although modifying either of these files could cause some very
+		strange issues unless you are very careful.
 	</p>
 
 	<p>
-	  To resume a QFF from these two checkpoint files, provide the pbqff binary
-	  with the <code>-c</code> or <nobr><code>--checkpoint</code></nobr> flag.
+		To resume a QFF from these two checkpoint files, provide the pbqff binary
+		with the <code>-c</code> or <nobr><code>--checkpoint</code></nobr> flag.
 	</p>
 
 	<p>
-	  As described in the <a href="#normal-coordinates">normal coordinate</a>
-	  section, there is also a configuration option
-	  called <code>norm_resume_hff</code>, which allows resuming a normal
-	  coordinate QFF from within the initial HFF (as in before it moves on to
-	  the QFF portion). This relies on the same <code>res.chk</code> file as the
-	  normal checkpoints, but its contents are very different during the HFF. To
-	  trigger this kind of checkpoint, you actually need to omit
-	  the <code>-c</code> command line flag and only include this option in the
-	  input file itself.
+		As described in the <a href="#normal-coordinates">normal coordinate</a>
+		section, there is also a configuration option
+		called <code>norm_resume_hff</code>, which allows resuming a normal
+		coordinate QFF from within the initial HFF (as in before it moves on to
+		the QFF portion). This relies on the same <code>res.chk</code> file as the
+		normal checkpoints, but its contents are very different during the HFF. To
+		trigger this kind of checkpoint, you actually need to omit
+		the <code>-c</code> command line flag and only include this option in the
+		input file itself.
 	</p>
 
 	<h3 id=atomic-masses><a href="#atomic-masses">Atomic Masses</a></h3>
 
 	<p>
-	  The optional <code>weights</code> keyword is used to specify the atomic
-	  masses to use for normal coordinate generation and mass-dependent
-	  spectroscopic calculations. If this is not provided, the mass of the most
-	  abundant isotope from
-	  the <a href="https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses">NIST
-	  atomic weight database</a> is used. See below for an example of how to
-	  include this in your input file for water. Currently the number of weights
-	  must equal the number of atoms. There is no way to specify weights for a
-	  subset of atoms.
+		The optional <code>weights</code> keyword is used to specify the atomic
+		masses to use for normal coordinate generation and mass-dependent
+		spectroscopic calculations. If this is not provided, the mass of the most
+		abundant isotope from
+		the <a href="https://www.nist.gov/pml/atomic-weights-and-isotopic-compositions-relative-atomic-masses">NIST
+			atomic weight database</a> is used. See below for an example of how to
+		include this in your input file for water. Currently the number of weights
+		must equal the number of atoms. There is no way to specify weights for a
+		subset of atoms.
 	</p>
 
 	<h4 id=example><a href="#example">Example</a></h4>
@@ -1531,236 +1536,251 @@ weights = [
 	<h3 id=dummy-atoms><a href="#dummy-atoms">Dummy Atoms</a></h3>
 
 	<p>
-	  This is possibly the worst-named pbqff option because it has nothing to do
-	  with the kind of dummy atoms typically included in a Z-matrix, for
-	  example, which do not require any special treatment in the pbqff input
-	  file (they should be erased by the chemistry program before pbqff sees the
-	  Cartesian geometry). Instead this is used to specify a number of atoms
-	  that should not be displaced in the course of the QFF. This is a somewhat
-	  experimental option that I have currently only used in Molpro to compute
-	  QFFs for small molecules in the presence of a non-bonded atom. This takes
-	  advantage of
-	  Molpro's <a href="https://www.molpro.net/manual/doku.php?id=molecular_geometry#z-matrix_input">Z-matrix
-	  input</a>, which allows including some Cartesian coordinates too. These
-	  Cartesian coordinates are frozen in geometry optimizations, allowing for
-	  the type of calculation described here. I consider it unlikely that this
-	  option will be useful or even usable in other packages, but it exists if
-	  you need it.
+		This is possibly the worst-named pbqff option because it has nothing to do
+		with the kind of dummy atoms typically included in a Z-matrix, for
+		example, which do not require any special treatment in the pbqff input
+		file (they should be erased by the chemistry program before pbqff sees the
+		Cartesian geometry). Instead this is used to specify a number of atoms
+		that should not be displaced in the course of the QFF. This is a somewhat
+		experimental option that I have currently only used in Molpro to compute
+		QFFs for small molecules in the presence of a non-bonded atom. This takes
+		advantage of
+		Molpro's <a href="https://www.molpro.net/manual/doku.php?id=molecular_geometry#z-matrix_input">Z-matrix
+			input</a>, which allows including some Cartesian coordinates too. These
+		Cartesian coordinates are frozen in geometry optimizations, allowing for
+		the type of calculation described here. I consider it unlikely that this
+		option will be useful or even usable in other packages, but it exists if
+		you need it.
 	</p>
 
-	<h3 id=resuming-normal-coordinate-qffs><a href="#resuming-normal-coordinate-qffs">Resuming Normal Coordinate QFFs</a></h3>
+	<h3 id=resuming-normal-coordinate-qffs><a href="#resuming-normal-coordinate-qffs">Resuming Normal Coordinate
+			QFFs</a></h3>
 
 	<p>
-	  Finally, the <code>norm_resume_hff</code> option allows you to resume a
-	  (presumably failed) normal coordinate QFF from the initial HFF stage. This
-	  was a much-requested feature by users of pbqff, but the separation of
-	  normal coordinate QFFs into the HFF and QFF stages made it difficult to
-	  integrate with the existing checkpoint mechanism, leading to this separate
-	  option. Indeed, it is fully separate from the command
-	  line <code>--checkpoint</code> option, which must be omitted when
-	  using <code>norm_resume_hff</code>.
+		Finally, the <code>norm_resume_hff</code> option allows you to resume a
+		(presumably failed) normal coordinate QFF from the initial HFF stage. This
+		was a much-requested feature by users of pbqff, but the separation of
+		normal coordinate QFFs into the HFF and QFF stages made it difficult to
+		integrate with the existing checkpoint mechanism, leading to this separate
+		option. Indeed, it is fully separate from the command
+		line <code>--checkpoint</code> option, which must be omitted when
+		using <code>norm_resume_hff</code>.
 	</p>
 
 	<h2 id=command-line-options><a href="#command-line-options">Command Line Options</a></h2>
 
 	<p>
-	  In addition to the settings in the input file described in the previous
-	  section, pbqff takes several command line options. To some extent, the
-	  most important of these is the name of the input file, but even this has a
-	  default value of <code>pbqff.toml</code>, allowing it to be omitted if you
-	  use that as your input file name. The other options are summarized in the
-	  table below.
+		In addition to the settings in the input file described in the previous
+		section, pbqff takes several command line options. To some extent, the
+		most important of these is the name of the input file, but even this has a
+		default value of <code>pbqff.toml</code>, allowing it to be omitted if you
+		use that as your input file name. The other options are summarized in the
+		table below.
 	</p>
 
 	<table>
-	  <caption>Summary of command line options</caption>
-	  <tr>
-<th>Option</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-<tr>
-<td><nobr><code>-c/--checkpoint</nobr></code></td>
-<td>bool</td>
-<td>Resume from the checkpoint files in the current directory (chk.json and res.chk). Defaults to false.</td>
-</tr>
-<tr>
-<td><nobr><code>-o/--overwrite</nobr></code></td>
-<td>bool</td>
-<td>Overwrite existing output from a previous run. Defaults to false.</td>
-</tr>
-<tr>
-<td><nobr><code>-v/--version</nobr></code></td>
-<td>bool</td>
-<td>Print the git commit hash and exit. Defaults to false.</td>
-</tr>
-<tr>
-<td><nobr><code>-t/--threads</nobr></code></td>
-<td>usize</td>
-<td>Set the maximum number of threads to use. Defaults to 0, which means to use as many threads as there are CPUS.</td>
-</tr>
-<tr>
-<td><nobr><code>-j/--json</nobr></code></td>
-<td>bool</td>
-<td>Serialize the input file to JSON and exit. For use by qffbuddy.</td>
-</tr>
-<tr>
-<td><nobr><code>-n/--no_del</nobr></code></td>
-<td>bool</td>
-<td>Don't delete any files when running the single-point energies. Defaults to false.</td>
-</tr>
+		<caption>Summary of command line options</caption>
+		<tr>
+			<th>Option</th>
+			<th>Type</th>
+			<th>Description</th>
+		</tr>
+		<tr>
+			<td>
+				<nobr><code>-c/--checkpoint</nobr></code>
+			</td>
+			<td>bool</td>
+			<td>Resume from the checkpoint files in the current directory (chk.json and res.chk). Defaults to false.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<nobr><code>-o/--overwrite</nobr></code>
+			</td>
+			<td>bool</td>
+			<td>Overwrite existing output from a previous run. Defaults to false.</td>
+		</tr>
+		<tr>
+			<td>
+				<nobr><code>-v/--version</nobr></code>
+			</td>
+			<td>bool</td>
+			<td>Print the git commit hash and exit. Defaults to false.</td>
+		</tr>
+		<tr>
+			<td>
+				<nobr><code>-t/--threads</nobr></code>
+			</td>
+			<td>usize</td>
+			<td>Set the maximum number of threads to use. Defaults to 0, which means to use as many threads as there are
+				CPUS.</td>
+		</tr>
+		<tr>
+			<td>
+				<nobr><code>-j/--json</nobr></code>
+			</td>
+			<td>bool</td>
+			<td>Serialize the input file to JSON and exit. For use by qffbuddy.</td>
+		</tr>
+		<tr>
+			<td>
+				<nobr><code>-n/--no_del</nobr></code>
+			</td>
+			<td>bool</td>
+			<td>Don't delete any files when running the single-point energies. Defaults to false.</td>
+		</tr>
 
 	</table>
 
 	<p>
-	  As indicated by the slash, each of these options can either be provided as
-	  a short option with a single dash and its first letter or as a long option
-	  with two dashes and the full name.
+		As indicated by the slash, each of these options can either be provided as
+		a short option with a single dash and its first letter or as a long option
+		with two dashes and the full name.
 	</p>
 
 	<p>
-	  Of these options, <code>-t/--threads</code> is probably the most important
-	  on a regular basis since it controls the number of threads spawned by
-	  pbqff. If you're running pbqff on a local computer, you may want to limit
-	  this to ~half of the CPUs on the machine to allow other programs to run
-	  smoothly. Otherwise, if you're running pbqff on some kind of HPC cluster,
-	  you'll likely want to set this to the number of CPUs you request in your
-	  job submission script.
+		Of these options, <code>-t/--threads</code> is probably the most important
+		on a regular basis since it controls the number of threads spawned by
+		pbqff. If you're running pbqff on a local computer, you may want to limit
+		this to ~half of the CPUs on the machine to allow other programs to run
+		smoothly. Otherwise, if you're running pbqff on some kind of HPC cluster,
+		you'll likely want to set this to the number of CPUs you request in your
+		job submission script.
 	</p>
 
 	<p>
-	  The <code>-o/--overwrite</code> option is also commonly used, especially
-	  if you make a typo in your first submission of a pbqff job. By default,
-	  pbqff will refuse to overwrite any output files in the current directory,
-	  even if they just contain an error message. Passing the <code>-o</code>
-	  flag will bypass this check and allow the run to continue.
+		The <code>-o/--overwrite</code> option is also commonly used, especially
+		if you make a typo in your first submission of a pbqff job. By default,
+		pbqff will refuse to overwrite any output files in the current directory,
+		even if they just contain an error message. Passing the <code>-o</code>
+		flag will bypass this check and allow the run to continue.
 	</p>
 
 	<p>
-	  The <code>-c/--checkpoint</code> flag can be used to resume from a
-	  previously-written checkpoint file. See
-	  the <a href="#checkpoints">Checkpoints</a> section above for more details.
+		The <code>-c/--checkpoint</code> flag can be used to resume from a
+		previously-written checkpoint file. See
+		the <a href="#checkpoints">Checkpoints</a> section above for more details.
 	</p>
 
 	<p>
-	  Finally, the <code>-n/--no_del</code> option prevents pbqff from cleaning
-	  up the (sometimes numerous) single-point energy input and output files as
-	  it runs. This is primarily useful if you're debugging some kind of issue
-	  in pbqff and need to see all of the output files at the end of a run. This
-	  is not the default because large QFFs produce a very large quantity of
-	  very similar files that HPC administrators don't always like to keep
-	  around.
+		Finally, the <code>-n/--no_del</code> option prevents pbqff from cleaning
+		up the (sometimes numerous) single-point energy input and output files as
+		it runs. This is primarily useful if you're debugging some kind of issue
+		in pbqff and need to see all of the output files at the end of a run. This
+		is not the default because large QFFs produce a very large quantity of
+		very similar files that HPC administrators don't always like to keep
+		around.
 	</p>
 
 	<p>
-	  As noted in the table, the <code>-j/--json</code> flag is intended
-	  primarily for use by qffbuddy and is hidden from the
-	  built-in <code>-h/--help</code> flag contained in pbqff. However, it is
-	  documented here in case it proves useful for other interfaces to pbqff.
+		As noted in the table, the <code>-j/--json</code> flag is intended
+		primarily for use by qffbuddy and is hidden from the
+		built-in <code>-h/--help</code> flag contained in pbqff. However, it is
+		documented here in case it proves useful for other interfaces to pbqff.
 	</p>
 
 	<h2 id=qffbuddy><a href="#qffbuddy">qffbuddy</a></h2>
 
 	<p>
-	  You may know qffbuddy as a Python GUI for writing and even running pbqff
-	  jobs. This section contains a reimplementation of qffbuddy as an HTML
-	  form. While you can't use it to run pbqff directly, submitting the form
-	  will copy the generated TOML file to your clipboard for pasting into an
-	  actual TOML file.
+		You may know qffbuddy as a Python GUI for writing and even running pbqff
+		jobs. This section contains a reimplementation of qffbuddy as an HTML
+		form. While you can't use it to run pbqff directly, submitting the form
+		will copy the generated TOML file to your clipboard for pasting into an
+		actual TOML file.
 	</p>
 
 	<form onsubmit="return qffbuddy(this);" class="qffbuddy">
-	  <label for="geometry">Geometry in Å:</label>
-	  <br>
-	  <textarea id="geometry" name="geometry" rows="10" cols="72"></textarea>
+		<label for="geometry">Geometry in Å:</label>
+		<br>
+		<textarea id="geometry" name="geometry" rows="10" cols="72"></textarea>
 
-	  <br>
-	  <label for="optimize">Does it need to be optimized?</label>
-	  <input type="checkbox" id="optimize" name="optimize" value="true"/>
+		<br>
+		<label for="optimize">Does it need to be optimized?</label>
+		<input type="checkbox" id="optimize" name="optimize" value="true" />
 
-	  <br>
-	  <label for="charge">Charge</label>
-	  <input type="number" id="charge" name="charge" value="0"/>
+		<br>
+		<label for="charge">Charge</label>
+		<input type="number" id="charge" name="charge" value="0" />
 
-	  <br>
-	  <label for="step_size">Step Size in Å</label>
-	  <input type="number" id="step_size" name="step_size" min="0"
-			 value="0.005" step="0.001"/>
+		<br>
+		<label for="step_size">Step Size in Å</label>
+		<input type="number" id="step_size" name="step_size" min="0" value="0.005" step="0.001" />
 
-	  <br>
-	  <label for="sleep_int">Sleep interval in sec</label>
-	  <input type="number" id="sleep_int" name="sleep_int" min="1" value="60" step="1"/>
+		<br>
+		<label for="sleep_int">Sleep interval in sec</label>
+		<input type="number" id="sleep_int" name="sleep_int" min="1" value="60" step="1" />
 
-	  <br>
-	  <label for="job_limit">Max jobs to submit at once</label>
-	  <input type="number" id="job_limit" name="job_limit" min="1" value="1024" step="1"/>
+		<br>
+		<label for="job_limit">Max jobs to submit at once</label>
+		<input type="number" id="job_limit" name="job_limit" min="1" value="1024" step="1" />
 
-	  <br>
-	  <label for="chunk_size">Jobs per chunk</label>
-	  <input type="number" id="chunk_size" name="chunk_size" min="1" value="1" step="1"/>
+		<br>
+		<label for="chunk_size">Jobs per chunk</label>
+		<input type="number" id="chunk_size" name="chunk_size" min="1" value="1" step="1" />
 
-	  <br>
-	  <label for="check_int">Checkpoint interval (0 to disable)</label>
-	  <input type="number" id="check_int" name="check_int" min="0" value="100" step="1"/>
+		<br>
+		<label for="check_int">Checkpoint interval (0 to disable)</label>
+		<input type="number" id="check_int" name="check_int" min="0" value="100" step="1" />
 
-	  <br>
-	  <fieldset>
-		<legend>Coordinate type</legend>
-		<input type="radio" id="SIC" name="coord_type" value="sic"/>
-		<label for="SIC">SIC</label>
-		<input type="radio" id="Cartesian" name="coord_type" value="cart"/>
-		<label for="Cartesian">Cartesian</label>
-		<input type="radio" id="Normal" name="coord_type" value="norm" checked/>
-		<label for="Normal">Normal</label>
-	  </fieldset>
+		<br>
+		<fieldset>
+			<legend>Coordinate type</legend>
+			<input type="radio" id="SIC" name="coord_type" value="sic" />
+			<label for="SIC">SIC</label>
+			<input type="radio" id="Cartesian" name="coord_type" value="cart" />
+			<label for="Cartesian">Cartesian</label>
+			<input type="radio" id="Normal" name="coord_type" value="norm" checked />
+			<label for="Normal">Normal</label>
+		</fieldset>
 
-	  <br>
-	  <label for="findiff">Finite differences? (Normal coordinates only)</label>
-	  <input type="checkbox" id="findiff" name="findiff" value="true"/>
-	  <br>
+		<br>
+		<label for="findiff">Finite differences? (Normal coordinates only)</label>
+		<input type="checkbox" id="findiff" name="findiff" value="true" />
+		<br>
 
-	  <br>
-	  <fieldset>
-		<legend>Chemistry Program</legend>
-		<input type="radio" id="molpro" name="program" value="molpro" checked/>
-		<label for="molpro">Molpro</label>
-		<input type="radio" id="mopac" name="program" value="mopac"/>
-		<label for="mopac">Mopac</label>
-		<input type="radio" id="dftb+" name="program" value="dftb+"/>
-		<label for="dftb+">DFTB+</label>
-		<input type="radio" id="cfour" name="program" value="cfour"/>
-		<label for="cfour">CFOUR</label>
-	  </fieldset>
+		<br>
+		<fieldset>
+			<legend>Chemistry Program</legend>
+			<input type="radio" id="molpro" name="program" value="molpro" checked />
+			<label for="molpro">Molpro</label>
+			<input type="radio" id="mopac" name="program" value="mopac" />
+			<label for="mopac">Mopac</label>
+			<input type="radio" id="dftb+" name="program" value="dftb+" />
+			<label for="dftb+">DFTB+</label>
+			<input type="radio" id="cfour" name="program" value="cfour" />
+			<label for="cfour">CFOUR</label>
+		</fieldset>
 
-	  <br>
-	  <fieldset>
-		<legend>Queuing System</legend>
-		<input type="radio" id="pbs" name="queue" value="pbs" checked/>
-		<label for="pbs">PBS</label>
-		<input type="radio" id="slurm" name="queue" value="slurm"/>
-		<label for="slurm">Slurm</label>
-		<input type="radio" id="local" name="queue" value="local"/>
-		<label for="local">Local</label>
-	  </fieldset>
+		<br>
+		<fieldset>
+			<legend>Queuing System</legend>
+			<input type="radio" id="pbs" name="queue" value="pbs" checked />
+			<label for="pbs">PBS</label>
+			<input type="radio" id="slurm" name="queue" value="slurm" />
+			<label for="slurm">Slurm</label>
+			<input type="radio" id="local" name="queue" value="local" />
+			<label for="local">Local</label>
+		</fieldset>
 
-	  <br>
-	  <label for="template">Template input file</label>
-	  <br>
-	  <textarea id="template" name="template" rows="10" cols="72"></textarea>
+		<br>
+		<label for="template">Template input file</label>
+		<br>
+		<textarea id="template" name="template" rows="10" cols="72"></textarea>
 
-	  <br>
-	  <label for="queue_template">Queue template (optional)</label>
-	  <br>
-	  <textarea id="queue_template" name="queue_template" rows="10" cols="72"></textarea>
+		<br>
+		<label for="queue_template">Queue template (optional)</label>
+		<br>
+		<textarea id="queue_template" name="queue_template" rows="10" cols="72"></textarea>
 
-	  <br>
-	  <label for="hybrid_template">Hybrid template (optional)</label>
-	  <br>
-	  <textarea id="hybrid_template" name="hybrid_template" rows="10" cols="72"></textarea>
+		<br>
+		<label for="hybrid_template">Hybrid template (optional)</label>
+		<br>
+		<textarea id="hybrid_template" name="hybrid_template" rows="10" cols="72"></textarea>
 
-	  <br>
-	  <input type="submit" value="Submit">
+		<br>
+		<input type="submit" value="Submit">
 	</form>
 
-  </body>
+</body>
+
 </html>

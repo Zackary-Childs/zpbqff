@@ -150,6 +150,20 @@ fn main() -> Result<(), std::io::Error> {
         return Ok(());
     }
     let config = Config::load(&args.infile);
+    // Ensures nothing is accidentally deleted
+    const RUN_MARKER: &str = ".pbqff-run";
+    let leftovers: Vec<_> = ["opt", "pts", "freqs"]
+        .into_iter()
+        .filter(|d| Path::new(d).exists())
+        .collect();
+    if !leftovers.is_empty() && !Path::new(RUN_MARKER).exists() {
+        die!(
+            "refusing to start: this directory contains {leftovers:?} but no \
+             {RUN_MARKER} file, so they were not made by pbqff and would be \
+             deleted. Run pbqff in its own directory, or remove them yourself \
+             if they are left over from an older pbqff run."
+        );
+    }
     let path = Path::new("pbqff.out");
     if path.exists() && !args.overwrite {
         die!("existing pbqff output. overwrite with -o/--overwrite");
@@ -166,6 +180,7 @@ fn main() -> Result<(), std::io::Error> {
     println!("PID: {}", std::process::id());
     println!("version: {}", version());
     psqs::max_threads(args.threads);
+    let _ = std::fs::write(RUN_MARKER, "");
     cleanup(".");
     let _ = std::fs::create_dir("pts");
 

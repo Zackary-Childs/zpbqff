@@ -115,6 +115,7 @@ where
 
         writeln!(w, "\n{} atoms require {} jobs", mol.atoms.len(), jobs.len())
             .unwrap();
+        super::fitted::check_fit_size(w, jobs.len(), taylor.forces.len());
 
         let resume = Resume::new(
             self.intder.clone(),

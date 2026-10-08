@@ -14,6 +14,7 @@ Harmonic Frequencies:
     1   B2  2523.5
     2   A1  1315.5
 3 normal coordinates require 69 points
+least-squares fit: 69 points x 22 terms, needs about 0.0 GB
 anpass sum of squared residuals: [residual]
 
 [Polyads]

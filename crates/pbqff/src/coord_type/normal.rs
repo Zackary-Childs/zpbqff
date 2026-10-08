@@ -149,6 +149,7 @@ impl Normal {
             jobs.len()
         )
         .unwrap();
+        super::fitted::check_fit_size(w, jobs.len(), taylor.forces.len());
 
         let resume = Resume {
             normal: self.clone(),
